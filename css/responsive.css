@@ -11,13 +11,10 @@
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .settings-layout { grid-template-columns: 170px minmax(0, 1fr); gap: var(--space-6); }
   .project-detail__grid { grid-template-columns: 1fr; gap: var(--space-5); }
-<<<<<<< HEAD
-=======
 
   /* Bug details: one column; status/assignment/details move to the top, side by side */
   .bug-layout { grid-template-columns: minmax(0, 1fr); }
   .bug-layout__side { order: -1; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
->>>>>>> bug-details-(Abdelrahman)
 }
 
 /* ===================== ≤ 900px ===================== */
@@ -117,8 +114,6 @@
   .bug-list__item { flex-wrap: wrap; }
   .bug-list__title { flex-basis: 100%; order: -1; white-space: normal; }
 
-<<<<<<< HEAD
-=======
   .bug-header { flex-direction: column; }
   .bug-header__title { font-size: var(--text-xl); }
   .status-track { padding: var(--space-3) var(--space-4); }
@@ -132,7 +127,6 @@
   .comment .avatar { width: 28px; height: 28px; font-size: 11px; }
   .comment__bubble { padding: var(--space-3); }
 
->>>>>>> bug-details-(Abdelrahman)
   .detail-list { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .detail-list dd { margin-bottom: var(--space-3); }
 

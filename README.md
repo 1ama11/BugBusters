@@ -15,11 +15,6 @@ Additionally, an admin dashboard provides an overview of bug statistics, project
 ### Project Objective
 
 The main objective of the Bug Tracking System is to **improve software quality, enhance team collaboration, and streamline bug resolution** by providing an organized and efficient platform for managing software issues.
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> bug-details-(Abdelrahman)
 
 ---
 
@@ -72,19 +67,12 @@ Bug-Tracking-System/
 │   ├── reports.html         ⏳ placeholder → Person 2
 │   ├── bugs.html            ⏳ placeholder → Person 3
 │   ├── report-bug.html      ⏳ placeholder → Person 3
-<<<<<<< HEAD
-│   └── bug-details.html     ⏳ placeholder → Person 4
-=======
 │   └── bug-details.html     ✅ Person 4
->>>>>>> bug-details-(Abdelrahman)
 ├── css/
 │   ├── style.css            Design tokens + ALL shared components (link first)
 │   ├── auth.css             Login / register only
 │   ├── admin.css            Users / projects / settings only
-<<<<<<< HEAD
-=======
 │   ├── bug-details.css      Bug details page only
->>>>>>> bug-details-(Abdelrahman)
 │   └── responsive.css       All breakpoints (link last)
 ├── js/
 │   ├── mock-data.js         Constants + sample data (only used for seeding)
@@ -92,11 +80,7 @@ Bug-Tracking-System/
 │   ├── ui.js                Toasts, modals, confirm, badges, avatars, dates, form errors, icons
 │   ├── auth.js              Permissions, login/register/logout, page guard
 │   ├── app.js               Shared layout: sidebar, top bar, profile menu, theme
-<<<<<<< HEAD
-│   ├── users.js | projects.js | settings.js   Page scripts
-=======
 │   ├── users.js | projects.js | settings.js | bug-details.js   Page scripts
->>>>>>> bug-details-(Abdelrahman)
 ├── assets/icons/favicon.svg, assets/images/logo.svg
 └── README.md
 ```
@@ -217,11 +201,7 @@ Never call `localStorage` directly. Use these:
 | `getBugs()`, `getBugById(id)` | Bugs |
 | `getBugsByProject(id)`, `getBugsAssignedTo(userId)`, `getBugsReportedBy(userId)` | Filtered bugs |
 | `addBug(fields, reporterId)` | Creates `BUG-0xx` with defaults, timestamps and a "created" history entry |
-<<<<<<< HEAD
-| `updateBug(id, changes, actorId, note)` | Saves changes; **auto-logs** status / assignedTo / priority / severity changes in `history` when `actorId` is given |
-=======
 | `updateBug(id, changes, actorId, note)` | Saves changes; **auto-logs** status / assignedTo / priority / severity / deadline changes in `history` when `actorId` is given |
->>>>>>> bug-details-(Abdelrahman)
 | `addComment(bugId, userId, text)` | Adds `CMT-0xx` comment |
 | `getCurrentUser()` | Logged-in user or `null` |
 | `getSystemSettings()` | `{ appName, defaultBugPriority, defaultBugSeverity, maxAttachmentSizeMB, … }` |
@@ -295,14 +275,6 @@ if (hasPermission(user, 'bugs.assign')) { /* show assignee dropdown */ }
 
 // Bug
 { id: 'BUG-001', title, description, severity, priority, status, projectId, reportedBy, assignedTo,
-<<<<<<< HEAD
-  createdAt, updatedAt, deadline: 'YYYY-MM-DD'|null, attachments: [],
-  comments: [{ id: 'CMT-001', userId, text, createdAt }],
-  history:  [{ id: 'HIST-001', type: 'created'|'status'|'assignment'|'priority'|'severity',
-               field, from, to, by: userId, at, note }] }
-```
-
-=======
   createdAt, updatedAt, deadline: 'YYYY-MM-DD'|null,
   attachments: [{ id: 'ATT-001', name, type: 'image/png', size: bytes, dataUrl: 'data:…', uploadedBy: userId, uploadedAt }],
   comments: [{ id: 'CMT-001', userId, text, createdAt }],
@@ -312,7 +284,6 @@ if (hasPermission(user, 'bugs.assign')) { /* show assignee dropdown */ }
 
 Attachments are stored as `data:` URLs (read with `FileReader.readAsDataURL`), so the Bug Details page can preview and download them. Use `generateId('ATT', allAttachments)` for the id. Keep files small — `localStorage` holds only about 5 MB in total; the Bug Details page scales screenshots down before saving.
 
->>>>>>> bug-details-(Abdelrahman)
 Dates are local ISO strings without a timezone: `"2026-10-19T10:00:00"`. Use `nowISO()` to create one.
 
 ### 4.7 Shared CSS classes (`css/style.css`)
@@ -329,7 +300,3 @@ Dates are local ISO strings without a timezone: `"2026-10-19T10:00:00"`. Use `no
 2. Use relative paths from `pages/`: `../css/…`, `../js/…`, links to other pages are just `bugs.html`.
 3. Escape user content with `escapeHTML()` before using `innerHTML`.
 4. Test with all four demo roles.
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> bug-details-(Abdelrahman)

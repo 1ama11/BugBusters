@@ -276,19 +276,12 @@ const TRACKED_BUG_FIELDS = {
   assignedTo: 'assignment',
   priority: 'priority',
   severity: 'severity',
-<<<<<<< HEAD
-=======
   deadline: 'deadline',
->>>>>>> bug-details-(Abdelrahman)
 };
 
 /**
  * Update a bug. If `actorId` is given, changes to status / assignedTo /
-<<<<<<< HEAD
- * priority / severity are recorded in bug.history automatically.
-=======
  * priority / severity / deadline are recorded in bug.history automatically.
->>>>>>> bug-details-(Abdelrahman)
  *   updateBug('BUG-001', { status: 'Resolved' }, currentUser.id, 'Fixed in v2.1');
  */
 export function updateBug(id, changes, actorId = null, note = '') {
