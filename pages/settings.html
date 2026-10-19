@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings · BugTrack</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="is-loading">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="app-sidebar"></aside>
+
+    <div class="main">
+      <header class="topbar" id="app-topbar"></header>
+
+      <main class="content" id="main-content" tabindex="-1">
+        <div class="page-header">
+          <div>
+            <h2 class="page-header__title">Settings</h2>
+            <p class="page-header__subtitle">Your profile and preferences apply only to you. System settings affect everyone and are restricted to administrators.</p>
+          </div>
+        </div>
+
+        <div class="settings-layout">
+          <!-- Section navigation -->
+          <nav class="settings-nav" aria-label="Settings sections">
+            <p class="settings-nav__group">Personal</p>
+            <a class="settings-nav__link" href="#profile"><span data-icon="user"></span>Profile</a>
+            <a class="settings-nav__link" href="#preferences"><span data-icon="settings"></span>Preferences</a>
+            <a class="settings-nav__link" href="#notifications"><span data-icon="bell"></span>Notifications</a>
+            <p class="settings-nav__group">Workspace</p>
+            <a class="settings-nav__link" href="#system"><span data-icon="shield"></span>System<span class="settings-nav__lock" data-icon="lock" data-icon-size="13" title="Admin only"></span></a>
+          </nav>
+
+          <div class="settings-sections">
+            <!-- ========== Profile ========== -->
+            <section class="card settings-card" id="profile" aria-labelledby="profile-title">
+              <form id="profile-form" novalidate>
+                <div class="card__header">
+                  <div>
+                    <h3 class="card__title" id="profile-title">Profile</h3>
+                    <p class="card__subtitle">How you appear to your teammates.</p>
+                  </div>
+                  <span class="scope-tag scope-tag--personal">Personal</span>
+                </div>
+                <div class="card__body">
+                  <div class="profile-summary" id="profile-summary"></div>
+                  <div class="form-grid mt-6">
+                    <div class="form-row">
+                      <div class="field">
+                        <label class="field__label" for="profile-name">Full name<span class="required" aria-hidden="true">*</span></label>
+                        <input class="input" type="text" id="profile-name" name="name" maxlength="60" autocomplete="name" required>
+                        <p class="field-error"></p>
+                      </div>
+                      <div class="field">
+                        <label class="field__label" for="profile-job">Job title</label>
+                        <input class="input" type="text" id="profile-job" name="jobTitle" maxlength="60" placeholder="e.g. Frontend Developer">
+                        <p class="field-error"></p>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="field">
+                        <label class="field__label" for="profile-email">Email</label>
+                        <input class="input" type="email" id="profile-email" name="email" readonly>
+                        <p class="field__hint">Used to sign in. Can't be changed.</p>
+                      </div>
+                      <div class="field">
+                        <label class="field__label" for="profile-role">Role</label>
+                        <input class="input" type="text" id="profile-role" name="role" readonly>
+                        <p class="field__hint">Roles are assigned by administrators.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card__footer">
+                  <button type="button" class="btn btn--ghost" id="profile-reset">Discard</button>
+                  <button type="submit" class="btn btn--primary">Save profile</button>
+                </div>
+              </form>
+            </section>
+
+            <!-- ========== Preferences ========== -->
+            <section class="card settings-card" id="preferences" aria-labelledby="preferences-title">
+              <div class="card__header">
+                <div>
+                  <h3 class="card__title" id="preferences-title">Preferences</h3>
+                  <p class="card__subtitle">Changes are saved automatically.</p>
+                </div>
+                <span class="scope-tag scope-tag--personal">Personal</span>
+              </div>
+              <div class="card__body setting-rows">
+                <div class="setting-row">
+                  <div class="setting-row__text">
+                    <label class="setting-row__label" for="pref-theme">Dark mode</label>
+                    <p class="setting-row__hint">Use a dark color theme. You can also switch from the moon/sun icon in the top bar.</p>
+                  </div>
+                  <label class="switch"><input type="checkbox" role="switch" id="pref-theme"><span class="switch__track"></span></label>
+                </div>
+                <div class="setting-row">
+                  <div class="setting-row__text">
+                    <label class="setting-row__label" for="pref-date-format">Date format</label>
+                    <p class="setting-row__hint">Preview: <strong id="date-preview"></strong></p>
+                  </div>
+                  <select class="select setting-row__control" id="pref-date-format">
+                    <option value="medium">Oct 19, 2026</option>
+                    <option value="dmy">19/10/2026</option>
+                    <option value="iso">2026-10-19</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <div class="setting-row__text">
+                    <label class="setting-row__label" for="pref-sidebar">Collapsed sidebar</label>
+                    <p class="setting-row__hint">Show only icons in the sidebar on large screens.</p>
+                  </div>
+                  <label class="switch"><input type="checkbox" role="switch" id="pref-sidebar"><span class="switch__track"></span></label>
+                </div>
+              </div>
+            </section>
+
+            <!-- ========== Notifications ========== -->
+            <section class="card settings-card" id="notifications" aria-labelledby="notifications-title">
+              <div class="card__header">
+                <div>
+                  <h3 class="card__title" id="notifications-title">Notifications</h3>
+                  <p class="card__subtitle">Choose what you'd like to hear about. Saved automatically.</p>
+                </div>
+                <span class="badge badge--warning"><span class="badge__dot"></span>Simulated</span>
+              </div>
+              <div class="card__body">
+                <p class="alert alert--info"><span data-icon="info"></span><span>There is no email server in this demo. These choices are saved and can be read by other pages through <code>getUserPreferences()</code>.</span></p>
+                <div class="setting-rows mt-4" id="notification-toggles"></div>
+
+                <fieldset class="channel-picker">
+                  <legend class="setting-row__label">Delivery channel</legend>
+                  <div class="channel-picker__options" id="channel-options">
+                    <label class="channel-option"><input type="radio" name="channel" value="in-app"><span>In-app</span></label>
+                    <label class="channel-option"><input type="radio" name="channel" value="email"><span>Email</span></label>
+                    <label class="channel-option"><input type="radio" name="channel" value="both"><span>Both</span></label>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="card__footer">
+                <button type="button" class="btn btn--secondary" id="test-notification"><span data-icon="bell"></span>Send test notification</button>
+              </div>
+            </section>
+
+            <!-- ========== System (Admin only) ========== -->
+            <section class="card settings-card settings-card--admin" id="system" aria-labelledby="system-title">
+              <div class="card__header">
+                <div>
+                  <h3 class="card__title" id="system-title">System settings</h3>
+                  <p class="card__subtitle">Workspace-wide options that affect every user.</p>
+                </div>
+                <span class="scope-tag scope-tag--admin"><span data-icon="lock" data-icon-size="12"></span>Admin only</span>
+              </div>
+
+              <!-- Shown to non-admins -->
+              <div class="card__body locked-panel" id="system-locked" hidden>
+                <span class="locked-panel__icon" data-icon="lock" data-icon-size="22"></span>
+                <p class="locked-panel__title">Restricted to administrators</p>
+                <p class="text-sm text-muted">System settings are managed by your workspace admins. Contact an administrator if something here needs to change.</p>
+              </div>
+
+              <!-- Shown to admins -->
+              <form id="system-form" novalidate hidden>
+                <div class="card__body form-grid">
+                  <div class="form-row">
+                    <div class="field">
+                      <label class="field__label" for="sys-app-name">Application name<span class="required" aria-hidden="true">*</span></label>
+                      <input class="input" type="text" id="sys-app-name" name="appName" maxlength="30" required>
+                      <p class="field__hint">Shown in the sidebar and on the sign-in page.</p>
+                      <p class="field-error"></p>
+                    </div>
+                    <div class="field">
+                      <label class="field__label" for="sys-session">Session timeout</label>
+                      <select class="select" id="sys-session" name="sessionTimeoutHours">
+                        <option value="0">Never (until log out)</option>
+                        <option value="1">1 hour</option>
+                        <option value="8">8 hours</option>
+                        <option value="24">24 hours</option>
+                        <option value="168">7 days</option>
+                      </select>
+                      <p class="field__hint">Users are signed out after this long.</p>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="field">
+                      <label class="field__label" for="sys-priority">Default bug priority</label>
+                      <select class="select" id="sys-priority" name="defaultBugPriority"></select>
+                    </div>
+                    <div class="field">
+                      <label class="field__label" for="sys-severity">Default bug severity</label>
+                      <select class="select" id="sys-severity" name="defaultBugSeverity"></select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="field">
+                      <label class="field__label" for="sys-attachment">Max attachment size (MB)</label>
+                      <input class="input" type="number" id="sys-attachment" name="maxAttachmentSizeMB" min="1" max="25" step="1" required>
+                      <p class="field-error"></p>
+                    </div>
+                  </div>
+                  <div class="setting-row setting-row--boxed">
+                    <div class="setting-row__text">
+                      <label class="setting-row__label" for="sys-registration">Allow public registration</label>
+                      <p class="setting-row__hint">When off, the sign-up page is disabled and only admins can grant access.</p>
+                    </div>
+                    <label class="switch"><input type="checkbox" role="switch" id="sys-registration" name="allowRegistration"><span class="switch__track"></span></label>
+                  </div>
+                </div>
+                <div class="card__footer">
+                  <button type="button" class="btn btn--ghost" id="system-reset">Discard</button>
+                  <button type="submit" class="btn btn--primary">Save system settings</button>
+                </div>
+              </form>
+            </section>
+
+            <!-- Danger zone (Admin only) -->
+            <section class="card settings-card danger-zone" id="danger-zone" aria-labelledby="danger-title" hidden>
+              <div class="card__body danger-zone__body">
+                <div>
+                  <h3 class="card__title" id="danger-title">Reset demo data</h3>
+                  <p class="text-sm text-muted">Deletes every change saved in this browser (users, projects, bugs, settings) and restores the original sample data. You will be signed out.</p>
+                </div>
+                <button type="button" class="btn btn--danger-outline" id="reset-data"><span data-icon="refresh"></span>Reset data</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="../js/settings.js"></script>
+</body>
+</html>

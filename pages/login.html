@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in · BugTrack</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="auth-page">
+    <!-- Brand / marketing panel (hidden on small screens) -->
+    <aside class="auth-brand" aria-hidden="true">
+      <div class="brand">
+        <span class="brand__logo" data-app-logo></span>
+        <span data-app-name>BugTrack</span>
+      </div>
+
+      <div class="auth-brand__copy">
+        <h2 class="auth-brand__title">Ship better software, one fixed bug at a time.</h2>
+        <p class="auth-brand__text">Report, assign and track issues across every project — in one clean workspace for developers, testers and managers.</p>
+        <div class="auth-features">
+          <p class="auth-feature"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Role-based workspaces for every team member</p>
+          <p class="auth-feature"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Full status history on every bug</p>
+          <p class="auth-feature"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Projects, reports and analytics in one place</p>
+        </div>
+      </div>
+
+      <div class="auth-preview">
+        <div class="auth-preview__card"><span class="auth-preview__id">BUG-005</span><span class="auth-preview__title">App crashes when enabling Face ID</span><span class="badge badge--danger"><span class="badge__dot"></span>Critical</span></div>
+        <div class="auth-preview__card"><span class="auth-preview__id">BUG-002</span><span class="auth-preview__title">Invoice PDF shows wrong currency</span><span class="badge badge--warning"><span class="badge__dot"></span>In Progress</span></div>
+        <div class="auth-preview__card"><span class="auth-preview__id">BUG-003</span><span class="auth-preview__title">Password reset email never arrives</span><span class="badge badge--success"><span class="badge__dot"></span>Resolved</span></div>
+      </div>
+    </aside>
+
+    <!-- Sign-in form -->
+    <main class="auth-main" id="main">
+      <div class="auth-card">
+        <div class="auth-card__brand brand">
+          <span class="brand__logo" data-app-logo></span>
+          <span data-app-name>BugTrack</span>
+        </div>
+
+        <header class="auth-card__header">
+          <h1 class="auth-card__title">Welcome back</h1>
+          <p class="auth-card__subtitle">Sign in to your workspace to continue.</p>
+        </header>
+
+        <div class="alert alert--error" id="login-alert" role="alert" hidden></div>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="email">Email</label>
+            <input class="input" type="email" id="email" name="email" autocomplete="username" placeholder="you@company.com" required>
+            <p class="field-error" id="email-error"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="password">Password</label>
+            <div class="input-group input-group--trailing">
+              <input class="input" type="password" id="password" name="password" autocomplete="current-password" placeholder="Enter your password" required>
+              <button type="button" class="icon-btn input-group__button" data-toggle-password="password" aria-label="Show password" aria-pressed="false"></button>
+            </div>
+            <p class="field-error" id="password-error"></p>
+          </div>
+
+          <div class="auth-form__row">
+            <label class="check">
+              <input type="checkbox" name="remember" checked>
+              <span>Keep me signed in</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg btn--block"><span class="btn__label">Sign in</span></button>
+        </form>
+
+        <p class="auth-switch">Don't have an account? <a href="register.html">Create one</a></p>
+
+        <section class="demo-accounts" aria-labelledby="demo-title">
+          <h2 class="demo-accounts__title" id="demo-title">Demo accounts</h2>
+          <div class="demo-accounts__grid">
+            <button type="button" class="demo-btn" data-demo-email="admin@bugtracker.dev">
+              <span class="demo-btn__role">Admin</span><span class="demo-btn__email">admin@bugtracker.dev</span>
+            </button>
+            <button type="button" class="demo-btn" data-demo-email="pm@bugtracker.dev">
+              <span class="demo-btn__role">Project Manager</span><span class="demo-btn__email">pm@bugtracker.dev</span>
+            </button>
+            <button type="button" class="demo-btn" data-demo-email="tester@bugtracker.dev">
+              <span class="demo-btn__role">Tester</span><span class="demo-btn__email">tester@bugtracker.dev</span>
+            </button>
+            <button type="button" class="demo-btn" data-demo-email="dev@bugtracker.dev">
+              <span class="demo-btn__role">Developer</span><span class="demo-btn__email">dev@bugtracker.dev</span>
+            </button>
+          </div>
+        </section>
+
+        <p class="sim-notice">
+          <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <span><strong>Simulated login for a university demo.</strong> Any non-empty password works for an existing active account. Passwords are never stored and this is not real security.</span>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { initLoginPage } from '../js/auth.js';
+    initLoginPage();
+  </script>
+</body>
+</html>

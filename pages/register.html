@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account · BugTrack</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="auth-page">
+    <aside class="auth-brand" aria-hidden="true">
+      <div class="brand">
+        <span class="brand__logo" data-app-logo></span>
+        <span data-app-name>BugTrack</span>
+      </div>
+
+      <div class="auth-brand__copy">
+        <h2 class="auth-brand__title">Join your team's bug tracking workspace.</h2>
+        <p class="auth-brand__text">Create an account as a developer, tester or project manager. Administrators are assigned by an existing admin.</p>
+        <div class="auth-features">
+          <p class="auth-feature"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Developers update bugs assigned to them</p>
+          <p class="auth-feature"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Testers report and assign new bugs</p>
+          <p class="auth-feature"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Project managers run projects and teams</p>
+        </div>
+      </div>
+      <p class="auth-brand__text" style="font-size: var(--text-sm)">University project · Phase 1 frontend demo</p>
+    </aside>
+
+    <main class="auth-main" id="main">
+      <div class="auth-card">
+        <div class="auth-card__brand brand">
+          <span class="brand__logo" data-app-logo></span>
+          <span data-app-name>BugTrack</span>
+        </div>
+
+        <header class="auth-card__header">
+          <h1 class="auth-card__title">Create your account</h1>
+          <p class="auth-card__subtitle">It takes less than a minute.</p>
+        </header>
+
+        <div class="alert alert--error" id="register-alert" role="alert" hidden></div>
+
+        <form class="auth-form" id="register-form" novalidate>
+          <fieldset>
+            <legend class="sr-only">Account details</legend>
+
+            <div class="field">
+              <label class="field__label" for="name">Full name<span class="required" aria-hidden="true">*</span></label>
+              <input class="input" type="text" id="name" name="name" autocomplete="name" placeholder="e.g. Mona Ali" maxlength="60" required>
+              <p class="field-error" id="name-error"></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="email">Work email<span class="required" aria-hidden="true">*</span></label>
+              <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="you@company.com" required>
+              <p class="field-error" id="email-error"></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="role">Role<span class="required" aria-hidden="true">*</span></label>
+              <select class="select" id="role" name="role" required></select>
+              <p class="field__hint">Admin accounts can't be created here.</p>
+              <p class="field-error" id="role-error"></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="password">Password<span class="required" aria-hidden="true">*</span></label>
+              <div class="input-group input-group--trailing">
+                <input class="input" type="password" id="password" name="password" autocomplete="new-password" placeholder="At least 8 characters" required aria-describedby="password-strength">
+                <button type="button" class="icon-btn input-group__button" data-toggle-password="password" aria-label="Show password" aria-pressed="false"></button>
+              </div>
+              <div class="strength" id="password-strength" aria-live="polite">
+                <div class="strength__bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                <span class="strength__label"></span>
+              </div>
+              <p class="field-error" id="password-error"></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="confirmPassword">Confirm password<span class="required" aria-hidden="true">*</span></label>
+              <div class="input-group input-group--trailing">
+                <input class="input" type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" placeholder="Re-enter your password" required>
+                <button type="button" class="icon-btn input-group__button" data-toggle-password="confirmPassword" aria-label="Show password" aria-pressed="false"></button>
+              </div>
+              <p class="field-error" id="confirmPassword-error"></p>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg btn--block"><span class="btn__label">Create account</span></button>
+          </fieldset>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="login.html">Sign in</a></p>
+
+        <p class="sim-notice">
+          <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <span><strong>Demo only.</strong> Your profile is saved in this browser's localStorage. The password is checked for length and match, then discarded — it is never stored.</span>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { initRegisterPage } from '../js/auth.js';
+    initRegisterPage();
+  </script>
+</body>
+</html>

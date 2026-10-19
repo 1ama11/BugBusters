@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Bug · BugTrack</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="is-loading">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="app-sidebar"></aside>
+
+    <div class="main">
+      <header class="topbar" id="app-topbar"></header>
+
+      <main class="content" id="main-content" tabindex="-1">
+        <!-- ============================================================
+             PLACEHOLDER — owned by Person 3.
+             Replace everything inside <main> with your page content.
+             Keep the shell (sidebar, topbar, script import) as it is.
+             ============================================================ -->
+        <section class="card placeholder">
+          <span class="placeholder__icon" data-icon="layers" data-icon-size="24"></span>
+          <h2>Report Bug</h2>
+          <p>Form that creates a bug with addBug(). Only Admin, Project Manager and Tester can open it.</p>
+          <p class="text-sm">This page is a placeholder owned by <strong>Person 3</strong>. The shared layout, navigation and permissions already work — see the integration guide in <code>README.md</code>.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initLayout } from '../js/app.js';
+    // import { addBug, getProjects, getUsers, getSystemSettings } from '../js/storage.js';
+    const user = initLayout({ pageId: 'report-bug', permission: 'bugs.report' });
+    if (user) {
+      // Person 3: render your page here.
+    }
+  </script>
+</body>
+</html>

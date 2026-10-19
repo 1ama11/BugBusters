@@ -1,0 +1,130 @@
+/* ==================================================================
+   auth.css — login.html and register.html
+   Split layout: brand panel on the left, form on the right.
+   ================================================================== */
+
+.auth-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--color-surface);
+}
+
+/* ---------- Brand panel ---------- */
+.auth-brand {
+  position: relative;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: var(--space-10);
+  overflow: hidden;
+  color: #f2f2f2;
+  background:
+    radial-gradient(900px 500px at 15% 0%, rgba(215, 20, 26, 0.22), transparent 60%),
+    radial-gradient(700px 500px at 100% 100%, rgba(215, 20, 26, 0.38), transparent 60%),
+    #0a0a0a;
+}
+.auth-brand::after {
+  /* subtle grid texture */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+.auth-brand > * { position: relative; z-index: 1; }
+.auth-brand .brand { color: #fff; font-size: var(--text-lg); }
+.auth-brand .brand__logo { width: 34px; height: 34px; }
+
+.auth-brand__copy { max-width: 440px; }
+.auth-brand__title { font-size: 2.25rem; font-weight: 650; letter-spacing: -0.03em; line-height: 1.15; color: #fff; }
+.auth-brand__text { margin-top: var(--space-4); font-size: var(--text-md); color: #bdbdbd; }
+
+.auth-features { display: grid; gap: var(--space-3); margin-top: var(--space-8); }
+.auth-feature { display: flex; gap: var(--space-3); align-items: flex-start; font-size: var(--text-base); color: #dcdcdc; }
+.auth-feature .icon {
+  flex-shrink: 0; padding: 5px; width: 28px; height: 28px;
+  border-radius: 8px; background: rgba(215, 20, 26, 0.16); color: #ff6b70;
+}
+
+/* Floating sample "issue" cards for visual interest */
+.auth-preview { display: grid; gap: var(--space-3); max-width: 420px; }
+.auth-preview__card {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(6px);
+  font-size: var(--text-sm);
+}
+.auth-preview__card:nth-child(2) { margin-left: var(--space-8); }
+.auth-preview__id { font-family: var(--font-mono); font-size: var(--text-xs); color: #a0a0a0; }
+.auth-preview__title { flex: 1; color: #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.auth-preview__card .badge { --badge-bg: rgba(255,255,255,0.08); }
+.auth-preview__card .badge--danger { --badge-fg: #ff9b9b; }
+.auth-preview__card .badge--warning { --badge-fg: #ffc77a; }
+.auth-preview__card .badge--success { --badge-fg: #6fe3a8; }
+
+/* ---------- Form panel ---------- */
+.auth-main {
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-10) var(--space-6);
+  background: var(--color-bg);
+}
+.auth-card { width: 100%; max-width: 420px; }
+
+.auth-card__brand { display: none; margin-bottom: var(--space-8); }
+.auth-card__header { margin-bottom: var(--space-6); }
+.auth-card__title { font-size: var(--text-2xl); letter-spacing: -0.03em; }
+.auth-card__subtitle { margin-top: var(--space-2); color: var(--color-text-muted); }
+
+.auth-form { display: grid; gap: var(--space-4); }
+.auth-form fieldset { display: grid; gap: var(--space-4); margin: 0; padding: 0; border: 0; min-width: 0; }
+.auth-form .input, .auth-form .select { min-height: 42px; }
+.auth-form__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+
+.auth-switch { margin-top: var(--space-6); text-align: center; font-size: var(--text-sm); color: var(--color-text-muted); }
+.auth-switch a { font-weight: 600; }
+
+.sim-notice {
+  display: flex; gap: var(--space-2); align-items: flex-start;
+  margin-top: var(--space-6);
+  padding: var(--space-3);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius);
+  font-size: var(--text-xs); color: var(--color-text-muted);
+}
+.sim-notice .icon { color: var(--color-warning); margin-top: 1px; }
+
+/* Demo account shortcuts */
+.demo-accounts { margin-top: var(--space-6); }
+.demo-accounts__title {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-text-subtle);
+}
+.demo-accounts__title::before, .demo-accounts__title::after { content: ""; flex: 1; height: 1px; background: var(--color-border); }
+.demo-accounts__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+.demo-btn {
+  display: grid; gap: 2px; text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.demo-btn:hover { border-color: var(--color-secondary); box-shadow: 0 0 0 3px var(--color-focus); }
+.demo-btn__role { font-size: var(--text-sm); font-weight: 600; }
+.demo-btn__email { font-size: var(--text-xs); color: var(--color-text-subtle); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Password strength meter */
+.strength { display: flex; align-items: center; gap: var(--space-3); }
+.strength__bars { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.strength__bars span { height: 4px; border-radius: var(--radius-full); background: var(--color-border); transition: background var(--transition); }
+.strength__label { min-width: 64px; text-align: right; font-size: var(--text-xs); font-weight: 600; color: var(--color-text-subtle); }
+.strength[data-score="0"] .strength__bars span:nth-child(-n+1) { background: var(--color-danger); }
+.strength[data-score="1"] .strength__bars span:nth-child(-n+1) { background: var(--color-danger); }
+.strength[data-score="2"] .strength__bars span:nth-child(-n+2) { background: var(--color-warning); }
+.strength[data-score="3"] .strength__bars span:nth-child(-n+3) { background: var(--color-info); }
+.strength[data-score="4"] .strength__bars span:nth-child(-n+4) { background: var(--color-success); }
