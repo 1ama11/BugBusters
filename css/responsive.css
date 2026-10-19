@@ -15,6 +15,9 @@
   /* Bug details: one column; status/assignment/details move to the top, side by side */
   .bug-layout { grid-template-columns: minmax(0, 1fr); }
   .bug-layout__side { order: -1; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+  /* Dashboard / Reports: stack the two columns */
+  .dash-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ===================== ≤ 900px ===================== */
@@ -113,6 +116,9 @@
   .member-picker__list { grid-template-columns: minmax(0, 1fr); }
   .bug-list__item { flex-wrap: wrap; }
   .bug-list__title { flex-basis: 100%; order: -1; white-space: normal; }
+  .dash-bug-list__item { flex-wrap: wrap; }
+  .dash-bug-list__title { flex-basis: 100%; order: -1; white-space: normal; }
+  .chart-box { height: 240px; }
 
   .bug-header { flex-direction: column; }
   .bug-header__title { font-size: var(--text-xl); }
