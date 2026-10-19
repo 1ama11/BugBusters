@@ -123,7 +123,12 @@ export const MOCK_PROJECTS = [
 /*
  * comments: [{ id, userId, text, createdAt }]
  * history:  [{ id, type, field, from, to, by, at, note }]
+<<<<<<< HEAD
  *   type is one of: "created" | "status" | "assignment" | "priority" | "severity" | "update"
+=======
+ *   type is one of: "created" | "status" | "assignment" | "priority" | "severity" | "deadline" | "update"
+ * attachments: [{ id: 'ATT-001', name, type, size, dataUrl, uploadedBy, uploadedAt }]
+>>>>>>> bug-details-(Abdelrahman)
  */
 export const MOCK_BUGS = [
   {

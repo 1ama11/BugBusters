@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+<<<<<<< HEAD
+=======
+  <link rel="stylesheet" href="../css/bug-details.css">
+>>>>>>> bug-details-(Abdelrahman)
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body class="is-loading">
@@ -21,6 +25,7 @@
       <header class="topbar" id="app-topbar"></header>
 
       <main class="content" id="main-content" tabindex="-1">
+<<<<<<< HEAD
         <!-- ============================================================
              PLACEHOLDER — owned by Person 4.
              Replace everything inside <main> with your page content.
@@ -32,10 +37,175 @@
           <p>Full bug view with comments and status history. Opened as bug-details.html?id=BUG-001.</p>
           <p class="text-sm">This page is a placeholder owned by <strong>Person 4</strong>. The shared layout, navigation and permissions already work — see the integration guide in <code>README.md</code>.</p>
         </section>
+=======
+        <!-- Shown when ?id= is missing or the bug doesn't exist -->
+        <section class="card bug-missing" id="bug-missing" hidden></section>
+
+        <article class="bug-page" id="bug-page" aria-labelledby="bug-title" hidden>
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list">
+              <li><a href="bugs.html">All Bugs</a></li>
+              <li id="crumb-project"></li>
+              <li><span class="mono" aria-current="page" id="crumb-bug"></span></li>
+            </ol>
+          </nav>
+
+          <header class="bug-header">
+            <div class="bug-header__main">
+              <p class="bug-header__id" id="bug-id"></p>
+              <h2 class="bug-header__title" id="bug-title"></h2>
+              <div class="bug-header__badges" id="bug-badges"></div>
+              <p class="bug-header__meta" id="bug-meta"></p>
+            </div>
+            <div class="bug-header__actions">
+              <a class="btn btn--secondary btn--sm" href="#comments" id="jump-comments"></a>
+              <button type="button" class="btn btn--secondary btn--sm" id="copy-link"></button>
+            </div>
+          </header>
+
+          <section class="card status-track" aria-label="Status progress">
+            <ol class="status-steps" id="status-steps"></ol>
+          </section>
+
+          <div class="bug-layout">
+            <div class="bug-col bug-layout__main">
+              <!-- Description -->
+              <section class="card" aria-labelledby="desc-title">
+                <div class="card__header">
+                  <h3 class="card__title" id="desc-title">Description</h3>
+                </div>
+                <div class="card__body">
+                  <p class="bug-description" id="bug-description"></p>
+                </div>
+              </section>
+
+              <!-- Attachments -->
+              <section class="card attachments-card" id="attachments" aria-labelledby="attach-title">
+                <div class="card__header">
+                  <div>
+                    <h3 class="card__title" id="attach-title">Attachments</h3>
+                    <p class="card__subtitle" id="attach-subtitle"></p>
+                  </div>
+                  <button type="button" class="btn btn--secondary btn--sm" id="attach-btn" hidden></button>
+                  <input type="file" id="attach-input" multiple hidden
+                         accept="image/*,.pdf,.txt,.log,.csv,.json,.xml,.zip,.doc,.docx,.xls,.xlsx">
+                </div>
+                <div class="card__body">
+                  <ul class="attach-grid" id="attach-list" role="list"></ul>
+                  <div id="attach-empty" hidden></div>
+                  <div class="dropzone" id="dropzone" hidden>
+                    <span class="dropzone__icon" id="dropzone-icon"></span>
+                    <div class="dropzone__text">
+                      <p>Drag &amp; drop screenshots or files here, or <button type="button" class="link-btn" id="dropzone-browse">browse</button></p>
+                      <p class="text-xs text-subtle" id="dropzone-hint"></p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Status history timeline -->
+              <section class="card" id="history" aria-labelledby="history-title">
+                <div class="card__header">
+                  <div>
+                    <h3 class="card__title" id="history-title">Status history</h3>
+                    <p class="card__subtitle" id="history-summary"></p>
+                  </div>
+                </div>
+                <div class="card__body">
+                  <ol class="timeline" id="timeline"></ol>
+                </div>
+              </section>
+
+              <!-- Comments & discussion -->
+              <section class="card" id="comments" aria-labelledby="comments-title">
+                <div class="card__header">
+                  <div>
+                    <h3 class="card__title" id="comments-title">Comments &amp; discussion</h3>
+                    <p class="card__subtitle" id="comments-count"></p>
+                  </div>
+                </div>
+                <div class="card__body">
+                  <ul class="comment-list" id="comment-list" role="list" aria-live="polite"></ul>
+                  <form class="comment-form" id="comment-form" novalidate>
+                    <span class="comment-form__avatar" id="comment-avatar"></span>
+                    <div class="field comment-form__field">
+                      <label class="sr-only" for="comment-text">Add a comment</label>
+                      <textarea class="textarea" id="comment-text" name="text" rows="3" maxlength="1000"
+                                placeholder="Ask a question, share what you found, or post an update…"></textarea>
+                      <p class="field-error"></p>
+                      <div class="comment-form__footer">
+                        <span class="text-xs text-subtle" id="comment-counter" aria-live="polite"></span>
+                        <span class="text-xs text-subtle comment-form__shortcut"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> to post</span>
+                        <button type="submit" class="btn btn--primary btn--sm">Post comment</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </div>
+
+            <aside class="bug-col bug-layout__side" aria-label="Status, assignment and details">
+              <!-- Status -->
+              <section class="card" aria-labelledby="status-title">
+                <div class="card__header">
+                  <h3 class="card__title" id="status-title">Status</h3>
+                </div>
+                <div class="card__body stack">
+                  <div class="status-current" id="status-current"></div>
+                  <div class="status-actions" id="status-actions"></div>
+                </div>
+              </section>
+
+              <!-- Assignment & deadline -->
+              <section class="card" aria-labelledby="assign-title">
+                <div class="card__header">
+                  <h3 class="card__title" id="assign-title">Assignment</h3>
+                </div>
+                <div class="card__body stack">
+                  <div class="stack-sm" id="assign-summary"></div>
+                  <p class="status-hint" id="assign-readonly" hidden>
+                    <span data-icon="lock" data-icon-size="14"></span>
+                    <span>Only testers, project managers and admins can assign bugs.</span>
+                  </p>
+                  <form class="form-grid assign-form" id="assign-form" novalidate hidden>
+                    <div class="field">
+                      <label class="field__label" for="assign-developer">Assigned developer</label>
+                      <select class="select" id="assign-developer" name="assignedTo"></select>
+                      <p class="field-error"></p>
+                    </div>
+                    <div class="field">
+                      <label class="field__label" for="assign-deadline">Deadline</label>
+                      <input class="input" type="date" id="assign-deadline" name="deadline">
+                      <p class="field__hint">Leave empty for no deadline.</p>
+                      <p class="field-error"></p>
+                    </div>
+                    <div class="field">
+                      <label class="field__label" for="assign-note">Note <span class="text-subtle">(optional)</span></label>
+                      <input class="input" type="text" id="assign-note" name="note" maxlength="200" placeholder="e.g. Owns the login module">
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--block">Save assignment</button>
+                  </form>
+                </div>
+              </section>
+
+              <!-- Details -->
+              <section class="card" aria-labelledby="details-title">
+                <div class="card__header">
+                  <h3 class="card__title" id="details-title">Details</h3>
+                </div>
+                <div class="card__body">
+                  <dl class="detail-list" id="bug-details"></dl>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </article>
+>>>>>>> bug-details-(Abdelrahman)
       </main>
     </div>
   </div>
 
+<<<<<<< HEAD
   <script type="module">
     import { initLayout } from '../js/app.js';
     // import { getBugById, updateBug, addComment } from '../js/storage.js';
@@ -44,5 +214,52 @@
       // Person 4: render your page here.
     }
   </script>
+=======
+  <!-- Change status -->
+  <dialog class="modal modal--sm" id="status-modal" aria-labelledby="status-modal-title">
+    <form id="status-form" novalidate>
+      <div class="modal__header">
+        <div>
+          <h2 class="modal__title" id="status-modal-title">Change status</h2>
+          <p class="modal__subtitle" id="status-modal-subtitle"></p>
+        </div>
+        <button type="button" class="icon-btn" data-close-modal aria-label="Close" data-icon="x"></button>
+      </div>
+      <div class="modal__body form-grid">
+        <div class="status-preview" id="status-preview"></div>
+        <div class="field">
+          <label class="field__label" for="status-note" id="status-note-label">Note</label>
+          <textarea class="textarea" id="status-note" name="note" rows="3" maxlength="300"></textarea>
+          <p class="field__hint">Shown in the status history so the team knows what happened.</p>
+          <p class="field-error"></p>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--secondary" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn--primary" id="status-submit">Update status</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Screenshot preview -->
+  <dialog class="modal modal--lg" id="preview-modal" aria-labelledby="preview-title">
+    <div class="modal__header">
+      <div>
+        <h2 class="modal__title preview__title" id="preview-title"></h2>
+        <p class="modal__subtitle" id="preview-meta"></p>
+      </div>
+      <button type="button" class="icon-btn" data-close-modal aria-label="Close" data-icon="x"></button>
+    </div>
+    <div class="modal__body preview__body">
+      <img class="preview__img" id="preview-img" alt="">
+    </div>
+    <div class="modal__footer">
+      <button type="button" class="btn btn--secondary" data-close-modal>Close</button>
+      <a class="btn btn--primary" id="preview-download" href="#" download>Download</a>
+    </div>
+  </dialog>
+
+  <script type="module" src="../js/bug-details.js"></script>
+>>>>>>> bug-details-(Abdelrahman)
 </body>
 </html>
