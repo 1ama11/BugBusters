@@ -1,7 +1,7 @@
 /* ==================================================================
    style.css — shared design system for the Bug Tracking System
    ------------------------------------------------------------------
-   1. Design tokens (light + dark)       7. Badges, avatars
+   1. Design tokens (dark theme)         7. Badges, avatars
    2. Reset & base                       8. Tables
    3. App shell (sidebar, top bar)       9. Modals, toasts, dropdowns
    4. Page structure                    10. Toolbar, stats, empty state
@@ -12,48 +12,49 @@
    ================================================================== */
 
 /* ===================== 1. Design tokens ===================== */
+/* The app has a single dark theme. */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
   /* Neutrals */
-  --color-bg: #f5f5f5;
-  --color-surface: #ffffff;
-  --color-surface-muted: #fafafa;
-  --color-surface-hover: #f0f0f0;
-  --color-sidebar: #fafafa;
-  --color-border: #e5e5e5;
-  --color-border-strong: #d0d0d0;
-  --color-text: #111111;
-  --color-text-muted: #5c5c5c;
-  --color-text-subtle: #8a8a8a;
+  --color-bg: #000000;
+  --color-surface: #111111;
+  --color-surface-muted: #161616;
+  --color-surface-hover: #1e1e1e;
+  --color-sidebar: #0a0a0a;
+  --color-border: #262626;
+  --color-border-strong: #363636;
+  --color-text: #f2f2f2;
+  --color-text-muted: #a8a8a8;
+  --color-text-subtle: #777777;
 
-  /* Primary (black) — buttons, solid fills */
-  --color-primary: #111111;
-  --color-primary-hover: #2b2b2b;
-  /* Secondary (red) — highlights, active states, links, focus */
-  --color-secondary: #d7141a;
-  --color-secondary-hover: #b51016;
-  --color-primary-soft: #fdecec;
-  --color-primary-text: #c0121a;
-  --color-focus: rgba(215, 20, 26, 0.3);
+  /* Primary (red) — buttons, solid fills */
+  --color-primary: #e0242b;
+  --color-primary-hover: #f0393f;
+  /* Secondary (bright red) — highlights, active states, links, focus */
+  --color-secondary: #ff3b42;
+  --color-secondary-hover: #ff5a60;
+  --color-primary-soft: #2a0f10;
+  --color-primary-text: #ff6b70;
+  --color-focus: rgba(255, 59, 66, 0.45);
 
   /* Semantic colors: text / soft background */
-  --color-success: #12784a;  --color-success-soft: #e5f6ed;
-  --color-warning: #9a5b0b;  --color-warning-soft: #fdf2df;
-  --color-danger: #c42b2b;   --color-danger-soft: #fdeaea;
-  --color-info: #2160c4;     --color-info-soft: #e7effd;
-  --color-neutral: #5d5d6b;  --color-neutral-soft: #efeff3;
-  --color-danger-solid: #d93636;
+  --color-success: #4ad491;  --color-success-soft: #132a1f;
+  --color-warning: #f2b45a;  --color-warning-soft: #2e2311;
+  --color-danger: #ff7b7b;   --color-danger-soft: #331618;
+  --color-info: #7aaaff;     --color-info-soft: #14223b;
+  --color-neutral: #a3a3b0;  --color-neutral-soft: #23232a;
+  --color-danger-solid: #e04848;
 
   /* Shape & depth */
   --radius-sm: 6px;
   --radius: 8px;
   --radius-lg: 12px;
   --radius-full: 999px;
-  --shadow-xs: 0 1px 2px rgba(16, 16, 32, 0.05);
-  --shadow-sm: 0 1px 3px rgba(16, 16, 32, 0.06), 0 1px 2px rgba(16, 16, 32, 0.04);
-  --shadow-md: 0 6px 16px rgba(16, 16, 32, 0.08), 0 2px 4px rgba(16, 16, 32, 0.04);
-  --shadow-lg: 0 20px 48px rgba(16, 16, 32, 0.16), 0 4px 12px rgba(16, 16, 32, 0.06);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
 
   /* Typography */
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -77,41 +78,6 @@
   --content-max-width: 1280px;
 
   --transition: 160ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-[data-theme="dark"] {
-  color-scheme: dark;
-  --color-bg: #000000;
-  --color-surface: #111111;
-  --color-surface-muted: #161616;
-  --color-surface-hover: #1e1e1e;
-  --color-sidebar: #0a0a0a;
-  --color-border: #262626;
-  --color-border-strong: #363636;
-  --color-text: #f2f2f2;
-  --color-text-muted: #a8a8a8;
-  --color-text-subtle: #777777;
-
-  /* On a black background, solid fills switch to red so they stay visible */
-  --color-primary: #e0242b;
-  --color-primary-hover: #f0393f;
-  --color-secondary: #ff3b42;
-  --color-secondary-hover: #ff5a60;
-  --color-primary-soft: #2a0f10;
-  --color-primary-text: #ff6b70;
-  --color-focus: rgba(255, 59, 66, 0.45);
-
-  --color-success: #4ad491;  --color-success-soft: #132a1f;
-  --color-warning: #f2b45a;  --color-warning-soft: #2e2311;
-  --color-danger: #ff7b7b;   --color-danger-soft: #331618;
-  --color-info: #7aaaff;     --color-info-soft: #14223b;
-  --color-neutral: #a3a3b0;  --color-neutral-soft: #23232a;
-  --color-danger-solid: #e04848;
-
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
-  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
 }
 
 /* ===================== 2. Reset & base ===================== */
@@ -514,14 +480,10 @@ body.modal-open { overflow: hidden; }
   color: var(--role-fg, var(--color-text-muted));
   font-size: var(--text-xs); font-weight: 550; white-space: nowrap;
 }
-.role--admin     { --role-fg: #7c3aed; --role-bg: #f4effe; --role-border: #e4d8fc; }
-.role--pm        { --role-fg: #2160c4; --role-bg: #ecf3fe; --role-border: #d3e2fb; }
-.role--tester    { --role-fg: #a14f0b; --role-bg: #fdf3e6; --role-border: #f7dfbe; }
-.role--developer { --role-fg: #12784a; --role-bg: #e9f7ef; --role-border: #c9ebd8; }
-[data-theme="dark"] .role--admin     { --role-fg: #c4a6ff; --role-bg: #241a3a; --role-border: #3a2a5c; }
-[data-theme="dark"] .role--pm        { --role-fg: #8db6ff; --role-bg: #142139; --role-border: #22355a; }
-[data-theme="dark"] .role--tester    { --role-fg: #f5b86a; --role-bg: #2c2012; --role-border: #47331a; }
-[data-theme="dark"] .role--developer { --role-fg: #5fd99c; --role-bg: #132a1f; --role-border: #1e4430; }
+.role--admin     { --role-fg: #c4a6ff; --role-bg: #241a3a; --role-border: #3a2a5c; }
+.role--pm        { --role-fg: #8db6ff; --role-bg: #142139; --role-border: #22355a; }
+.role--tester    { --role-fg: #f5b86a; --role-bg: #2c2012; --role-border: #47331a; }
+.role--developer { --role-fg: #5fd99c; --role-bg: #132a1f; --role-border: #1e4430; }
 
 .avatar {
   display: inline-grid; place-items: center; flex-shrink: 0;

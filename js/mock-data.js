@@ -341,7 +341,6 @@ export const DEFAULT_SYSTEM_SETTINGS = {
 };
 
 export const DEFAULT_USER_PREFERENCES = {
-  theme: 'light',            // 'light' | 'dark'
   dateFormat: 'medium',      // 'medium' (Oct 19, 2026) | 'dmy' (19/10/2026) | 'iso' (2026-10-19)
   sidebarCollapsed: false,
   notifications: {

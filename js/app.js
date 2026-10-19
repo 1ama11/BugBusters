@@ -1,7 +1,7 @@
 /**
  * app.js
  * ------------------------------------------------------------------
- * Shared application layout: sidebar, top bar, profile menu, theme.
+ * Shared application layout: sidebar, top bar, profile menu.
  *
  * Every protected page calls initLayout() once:
  *
@@ -12,10 +12,9 @@
  * initLayout() will:
  *   1. seed localStorage on the first visit
  *   2. redirect to login (or dashboard) if the user may not see the page
- *   3. apply the user's theme
- *   4. render the sidebar + top bar into #app-sidebar and #app-topbar
- *   5. show any pending flash message
- *   6. reveal the page (body.is-loading is removed)
+ *   3. render the sidebar + top bar into #app-sidebar and #app-topbar
+ *   4. show any pending flash message
+ *   5. reveal the page (body.is-loading is removed)
  * ------------------------------------------------------------------
  */
 
@@ -61,32 +60,6 @@ let layoutState = { pageId: '', title: '' };
 
 // Lets refreshLayout() remove the document-level listeners added by the previous render
 let layoutListeners = null;
-
-/* ===================== Theme ===================== */
-
-export function applyTheme(theme = 'light') {
-  document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'light';
-}
-
-/** Switch theme for the current user and save it. Returns the new theme. */
-export function toggleTheme() {
-  const user = getCurrentUser();
-  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(next);
-  if (user) updateUserPreferences(user.id, { theme: next });
-  updateThemeButton();
-  document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
-  return next;
-}
-
-function updateThemeButton() {
-  const button = document.getElementById('theme-toggle');
-  if (!button) return;
-  const dark = document.documentElement.dataset.theme === 'dark';
-  button.innerHTML = icon(dark ? 'sun' : 'moon', 18);
-  button.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
-  button.title = dark ? 'Light theme' : 'Dark theme';
-}
 
 /* ===================== Rendering ===================== */
 
@@ -148,7 +121,6 @@ function renderTopbar(user, title) {
     </div>
     <div class="topbar__right">
       ${showReportButton ? `<a class="btn btn--primary btn--sm topbar__cta" href="report-bug.html">${icon('plus', 16)}<span>Report bug</span></a>` : ''}
-      <button type="button" class="icon-btn" id="theme-toggle"></button>
       <div class="dropdown" id="profile-dropdown">
         <button type="button" class="profile-btn" id="profile-button" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
           ${avatarHTML(user, 'sm')}
@@ -174,7 +146,6 @@ function renderTopbar(user, title) {
         </div>
       </div>
     </div>`;
-  updateThemeButton();
 }
 
 /* ===================== Behaviour ===================== */
@@ -265,7 +236,6 @@ export function initLayout({ pageId, title, permission = null } = {}) {
   if (!user) return null;
 
   layoutState = { pageId, title: title || navItem?.label || '' };
-  applyTheme(getUserPreferences(user.id).theme);
   renderLayout(user);
   hydrateIcons(document);
   showFlash();
@@ -288,6 +258,5 @@ function renderLayout(user) {
   renderTopbar(user, layoutState.title);
   bindSidebar(user, signal);
   bindProfileMenu(signal);
-  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
   document.title = `${layoutState.title} · ${getSystemSettings().appName}`;
 }

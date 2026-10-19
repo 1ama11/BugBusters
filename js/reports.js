@@ -27,8 +27,6 @@ if (user) {
   renderStats(bugs);
   renderProjects();
   renderCharts(bugs);
-  // Redraw with the new colours when the user toggles light/dark mode
-  document.addEventListener('themechange', () => renderCharts(bugs));
 }
 
 /* ===================== Stats ===================== */

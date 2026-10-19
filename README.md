@@ -79,7 +79,7 @@ Bug-Tracking-System/
 │   ├── storage.js           The ONLY file that touches localStorage
 │   ├── ui.js                Toasts, modals, confirm, badges, avatars, dates, form errors, icons
 │   ├── auth.js              Permissions, login/register/logout, page guard
-│   ├── app.js               Shared layout: sidebar, top bar, profile menu, theme
+│   ├── app.js               Shared layout: sidebar, top bar, profile menu
 │   ├── users.js | projects.js | settings.js | bug-details.js   Page scripts
 ├── assets/icons/favicon.svg, assets/images/logo.svg
 └── README.md
@@ -145,7 +145,7 @@ Your placeholder page already looks like this. Keep the shell; replace what's in
 
 ```html
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -205,7 +205,7 @@ Never call `localStorage` directly. Use these:
 | `addComment(bugId, userId, text)` | Adds `CMT-0xx` comment |
 | `getCurrentUser()` | Logged-in user or `null` |
 | `getSystemSettings()` | `{ appName, defaultBugPriority, defaultBugSeverity, maxAttachmentSizeMB, … }` |
-| `getUserPreferences(userId)` | `{ theme, dateFormat, notifications: {…} }` |
+| `getUserPreferences(userId)` | `{ dateFormat, sidebarCollapsed, notifications: {…} }` |
 | `generateId(prefix, items)`, `nowISO()` | Helpers |
 
 Examples:
@@ -292,7 +292,7 @@ Dates are local ISO strings without a timezone: `"2026-10-19T10:00:00"`. Use `no
 - Buttons: `.btn` + `--primary | --secondary | --ghost | --danger | --danger-outline`, sizes `--sm | --lg`, `.icon-btn`
 - Forms: `.field`, `.field__label`, `.field__hint`, `.field-error`, `.input`, `.select`, `.textarea`, `.form-row`, `.form-grid`, `.check`, `.switch`, `.input-group`
 - Data: `.table-wrapper` + `.table`, `.toolbar`, `.segmented`, `.badge`, `.role-badge`, `.avatar`, `.user-cell`, `.detail-list`, `.progress`, `.empty-state`, `.alert--error|info|warning|success`
-- Colours: use the CSS variables (`var(--color-primary)`, `var(--color-text-muted)`, `var(--color-border)` …) — never hard-coded hex values — so dark mode works automatically.
+- Colours: use the CSS variables (`var(--color-primary)`, `var(--color-text-muted)`, `var(--color-border)` …) — never hard-coded hex values — so every page matches the app's dark theme.
 
 ### 4.8 Team rules
 

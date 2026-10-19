@@ -4,7 +4,7 @@
  *   Workspace (Admin only): system settings, reset demo data
  */
 
-import { initLayout, refreshLayout, applyTheme } from './app.js';
+import { initLayout, refreshLayout } from './app.js';
 import {
   getCurrentUser,
   updateUser,
@@ -96,29 +96,14 @@ function initProfile() {
 
 function initPreferences() {
   const prefs = getUserPreferences(currentUser.id);
-  const themeToggle = document.getElementById('pref-theme');
   const dateSelect = document.getElementById('pref-date-format');
   const sidebarToggle = document.getElementById('pref-sidebar');
   const preview = document.getElementById('date-preview');
 
-  themeToggle.checked = prefs.theme === 'dark';
   dateSelect.value = prefs.dateFormat;
   sidebarToggle.checked = prefs.sidebarCollapsed;
   const updatePreview = () => { preview.textContent = formatDate(nowISO(), { time: true }); };
   updatePreview();
-
-  themeToggle.addEventListener('change', () => {
-    const theme = themeToggle.checked ? 'dark' : 'light';
-    updateUserPreferences(currentUser.id, { theme });
-    applyTheme(theme);
-    refreshLayout(); // updates the sun/moon icon in the top bar
-    showToast(`${theme === 'dark' ? 'Dark' : 'Light'} theme saved.`, 'success', 2000);
-  });
-
-  // Keep the switch in sync when the top-bar button is used
-  document.addEventListener('themechange', (event) => {
-    themeToggle.checked = event.detail.theme === 'dark';
-  });
 
   dateSelect.addEventListener('change', () => {
     updateUserPreferences(currentUser.id, { dateFormat: dateSelect.value });
