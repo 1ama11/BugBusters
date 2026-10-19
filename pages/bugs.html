@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Bugs · BugTrack</title>
+  
+  <!-- Shell Fonts and Icons -->
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/bugs.css">
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -21,28 +26,107 @@
       <header class="topbar" id="app-topbar"></header>
 
       <main class="content" id="main-content" tabindex="-1">
-        <!-- ============================================================
-             PLACEHOLDER — owned by Person 3.
-             Replace everything inside <main> with your page content.
-             Keep the shell (sidebar, topbar, script import) as it is.
-             ============================================================ -->
-        <section class="card placeholder">
-          <span class="placeholder__icon" data-icon="layers" data-icon-size="24"></span>
-          <h2>Bug List</h2>
-          <p>Searchable, filterable list of bugs. Supports bugs.html?project=PROJ-001 from the Projects page.</p>
-          <p class="text-sm">This page is a placeholder owned by <strong>Person 3</strong>. The shared layout, navigation and permissions already work — see the integration guide in <code>README.md</code>.</p>
-        </section>
+        <div class="bugs-container">
+          
+          <!-- Top Header Navigation -->
+          <header class="bugs-top-nav">
+            <div class="bugs-brand">
+              <span class="bugs-brand-dot"></span>
+              <span>BugTrack</span>
+            </div>
+            <nav class="bugs-nav-tabs">
+              <a href="bugs.html" class="bugs-nav-link active">Bug List</a>
+              <a href="report-bug.html" class="bugs-nav-link">Report Bug</a>
+            </nav>
+          </header>
+
+          <!-- Page Title & Actions -->
+          <div class="bugs-page-header">
+            <div>
+              <h1>Bug List</h1>
+              <p>Browse, search, and manage reported bugs across all projects.</p>
+            </div>
+            <button id="reportBugBtn" class="btn-report-bug">+ Report New Bug</button>
+          </div>
+
+          <!-- Filters & Search Toolbar -->
+          <div class="bugs-toolbar">
+            <input type="text" id="bugSearchInput" class="bugs-search" placeholder="Search by title, ID, or description...">
+
+            <select id="filterStatus" class="bugs-filter">
+              <option value="">All Statuses</option>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
+              <option value="Reopened">Reopened</option>
+            </select>
+
+            <select id="filterSeverity" class="bugs-filter">
+              <option value="">All Severities</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+
+            <select id="filterPriority" class="bugs-filter">
+              <option value="">All Priorities</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+
+            <select id="filterProject" class="bugs-filter" style="display:none;">
+              <option value="">All Projects</option>
+            </select>
+
+            <select id="sortBugs" class="bugs-sort">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="priority">Highest Priority</option>
+              <option value="severity">Highest Severity</option>
+            </select>
+
+            <button id="clearFiltersBtn" class="btn-clear-filters">Clear Filters</button>
+          </div>
+
+          <!-- Bugs Table Container -->
+          <div id="bugsTableWrapper" class="bugs-table-wrapper">
+            <table class="bugs-table">
+              <thead>
+                <tr>
+                  <th>BUG ID</th>
+                  <th>TITLE</th>
+                  <th>PROJECT</th>
+                  <th>SEVERITY</th>
+                  <th>PRIORITY</th>
+                  <th>STATUS</th>
+                  <th>REPORTED BY</th>
+                  <th>DATE</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="bugsTableBody">
+                <!-- Dynamic Content via bugs.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="bugsEmptyState" class="bugs-state" style="display:none;">
+            <h3>No bugs found</h3>
+            <p>Try adjusting your search or filters, or report a new bug.</p>
+          </div>
+        </div>
       </main>
     </div>
   </div>
 
+  <script src="../js/bugs.js" defer></script>
   <script type="module">
     import { initLayout } from '../js/app.js';
-    // import { getBugs, getProjectById, getUserById } from '../js/storage.js';
-    const user = initLayout({ pageId: 'bugs' });
-    if (user) {
-      // Person 3: render your page here.
-    }
+    initLayout({ pageId: 'bugs' });
   </script>
 </body>
 </html>
