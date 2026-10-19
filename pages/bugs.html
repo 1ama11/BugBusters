@@ -75,7 +75,7 @@
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
+              <option value="Critical">Critical</option>
             </select>
 
             <select id="filterProject" class="bugs-filter" style="display:none;">
@@ -123,7 +123,7 @@
     </div>
   </div>
 
-  <script src="../js/bugs.js" defer></script>
+  <script type="module" src="../js/bugs.js"></script>
   <script type="module">
     import { initLayout } from '../js/app.js';
     initLayout({ pageId: 'bugs' });

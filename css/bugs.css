@@ -317,6 +317,7 @@ body {
 .badge-priority-low        { background: rgba(156, 163, 175, 0.15); color: #6b7280; }
 .badge-priority-medium     { background: rgba(245, 158, 11, 0.18); color: #d97706; }
 .badge-priority-high       { background: rgba(249, 115, 22, 0.18); color: #ea580c; }
+.badge-priority-critical,
 .badge-priority-urgent     { background: rgba(224, 36, 43, 0.18); color: var(--bugs-secondary); }
 
 .badge-status-open         { background: rgba(16, 185, 129, 0.15); color: #059669; }

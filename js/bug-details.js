@@ -175,7 +175,7 @@ if (currentUser) {
     render();
 
     // The page was hidden while loading, so the browser couldn't scroll to #comments by itself
-    if (window.location.hash) document.querySelector(window.location.hash)?.scrollIntoView();
+    if (window.location.hash) byId(window.location.hash.slice(1))?.scrollIntoView();
 
     // Another tab changed the bugs (e.g. a teammate's page): show the latest version
     window.addEventListener('storage', (event) => {
@@ -234,7 +234,7 @@ function lastReached(status) {
 function lastFinishedAt() {
   const entry = [...(bug.history || [])].reverse()
     .find((h) => h.type === 'status' && (h.to === 'Resolved' || h.to === 'Closed'));
-  return entry?.at || bug.updatedAt;
+  return entry?.at || bug.updatedAt || bug.createdAt;
 }
 
 function isOpen() {
@@ -258,7 +258,7 @@ function deadlineStatus() {
   const due = parseDate(bug.deadline);
   if (!due) return null;
   if (!isOpen()) {
-    const late = daysBetween(due, parseDate(lastFinishedAt()));
+    const late = daysBetween(due, parseDate(lastFinishedAt()) || new Date());
     return late > 0
       ? { text: `Finished ${plural(late, 'day')} late`, variant: 'warning' }
       : { text: 'Finished on time', variant: 'success' };
@@ -332,7 +332,7 @@ function renderHeader() {
   const comments = bug.comments || [];
 
   els.crumbProject.innerHTML = project
-    ? `<a href="bugs.html?project=${encodeURIComponent(project.id)}">${escapeHTML(project.name)}</a>`
+    ? `<a href="projects.html?id=${encodeURIComponent(project.id)}">${escapeHTML(project.name)}</a>`
     : '<span>No project</span>';
   els.crumbBug.textContent = bug.id;
 
@@ -482,11 +482,14 @@ function timelineItemHTML(entry) {
 function renderTimeline() {
   const history = [...(bug.history || [])].sort((a, b) => String(a.at).localeCompare(String(b.at)));
   const created = parseDate(bug.createdAt);
-  const age = isOpen()
-    ? `open for ${humanDuration(created, new Date())}`
-    : `${bug.status.toLowerCase()} after ${humanDuration(created, parseDate(lastFinishedAt()))}`;
+  let age = '';
+  if (created) {
+    age = isOpen()
+      ? ` · open for ${humanDuration(created, new Date())}`
+      : ` · ${String(bug.status).toLowerCase()} after ${humanDuration(created, parseDate(lastFinishedAt()) || new Date())}`;
+  }
 
-  els.historySummary.textContent = `${plural(history.length, 'event')} · ${age}`;
+  els.historySummary.textContent = `${plural(history.length, 'event')}${age}`;
   els.timeline.innerHTML = history.length
     ? history.map(timelineItemHTML).join('')
     : `<li>${emptyStateHTML('No history yet', 'Status changes and assignments will appear here.', 'layers')}</li>`;
