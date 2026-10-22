@@ -3,10 +3,9 @@
  * ------------------------------------------------------------------
  * Shared constants + realistic sample data for the Bug Tracking System.
  *
- * This file is ONLY used to seed localStorage on the first visit
- * (see initStorage() in storage.js). Pages should never read these
- * arrays directly — always go through storage.js so that user changes
- * are respected.
+ * Phase 1: this is the app's only data source. Pages should never read
+ * these arrays directly — always go through storage.js, so that in
+ * Phase 2 only storage.js has to change to use the backend.
  *
  * ID conventions (keep these consistent across the team):
  *   Users     USER-001   Projects  PROJ-001   Bugs     BUG-001
@@ -350,13 +349,5 @@ export const DEFAULT_USER_PREFERENCES = {
     projectUpdates: false,
     weeklySummary: false,
     channel: 'in-app',       // 'in-app' | 'email' | 'both'
-  },
-};
-
-/** Shape stored under the "bugtracker.settings" key. */
-export const MOCK_SETTINGS = {
-  system: { ...DEFAULT_SYSTEM_SETTINGS },
-  userPreferences: {
-    // userId -> preferences. Missing users fall back to DEFAULT_USER_PREFERENCES.
   },
 };

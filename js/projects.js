@@ -34,6 +34,7 @@ import {
   closeModal,
   confirmDialog,
   showToast,
+  showDemoSaved,
   showFormErrors,
   clearFormErrors,
   debounce,
@@ -399,12 +400,13 @@ async function handleFormSubmit(event) {
     if (!ok) return;
   }
 
+  // Phase 1: storage.js saves nothing, so the list re-renders unchanged
   if (existing) {
     updateProject(existing.id, data);
-    showToast(`${data.name} was updated.`, 'success');
+    showDemoSaved(`${data.name} was updated.`);
   } else {
-    const created = addProject(data);
-    showToast(`Project ${created.name} (${created.key}) created.`, 'success');
+    addProject(data);
+    showDemoSaved(`Project ${data.name} (${data.key}) created.`);
   }
   closeModal(els.formModal);
   render();

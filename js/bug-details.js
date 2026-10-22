@@ -28,7 +28,6 @@ import {
   getSystemSettings,
   generateId,
   nowISO,
-  STORAGE_KEYS,
 } from './storage.js';
 import { hasPermission, canUpdateBug } from './auth.js';
 import { ROLES, OPEN_BUG_STATUSES } from './mock-data.js';
@@ -46,6 +45,7 @@ import {
   closeModal,
   confirmDialog,
   showToast,
+  showDemoSaved,
   setFieldError,
   clearFieldError,
   clearFormErrors,
@@ -85,7 +85,7 @@ const NOTE_REQUIRED = ['Reopened'];
 const STATUS_TONES = { Open: 'info', 'In Progress': 'warning', Resolved: 'success', Closed: 'neutral', Reopened: 'danger' };
 
 const COMMENT_MAX = 1000;
-const IMAGE_MAX_SIDE = 1600; // px: screenshots are scaled down to save localStorage space
+const IMAGE_MAX_SIDE = 1600; // px: screenshots are scaled down before upload
 const RESIZABLE_IMAGES = ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'];
 
 /* Extra icons this page needs (same 24x24 stroke style as ICON_PATHS in ui.js) */
@@ -176,11 +176,6 @@ if (currentUser) {
 
     // The page was hidden while loading, so the browser couldn't scroll to #comments by itself
     if (window.location.hash) byId(window.location.hash.slice(1))?.scrollIntoView();
-
-    // Another tab changed the bugs (e.g. a teammate's page): show the latest version
-    window.addEventListener('storage', (event) => {
-      if (event.key === STORAGE_KEYS.BUGS) refresh();
-    });
   }
 }
 
@@ -271,21 +266,19 @@ function deadlineStatus() {
 }
 
 /**
- * Run a storage change, then re-render. localStorage throws when it is full
- * (big attachments), so the error is caught and shown instead of breaking the page.
+ * Run a change through storage.js, then re-render.
+ * Phase 1: storage.js saves nothing, so the page re-renders unchanged and a
+ * "demo only" toast is shown. Phase 2: the change is sent to the backend.
  */
 function save(action, successMessage) {
   try {
     action();
   } catch (error) {
     console.error(error);
-    const full = error?.name === 'QuotaExceededError';
-    showToast(full
-      ? 'Browser storage is full. Remove some attachments and try again.'
-      : 'Could not save your changes. Please try again.', 'error');
+    showToast('Could not save your changes. Please try again.', 'error');
     return false;
   }
-  if (successMessage) showToast(successMessage, 'success');
+  if (successMessage) showDemoSaved(successMessage);
   refresh();
   return true;
 }

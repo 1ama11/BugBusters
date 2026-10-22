@@ -1,11 +1,13 @@
 /* ==========================================================================
    bugs.js — Bug Tracking Logic & Data Binding
-   Reads and writes bugs through the shared data layer (storage.js), so the
-   Bug List, Report Bug, Bug Details, Dashboard and Reports all show the
-   same bugs. Loaded as an ES module (<script type="module">).
+   Reads bugs through the shared data layer (storage.js), so the Bug List,
+   Report Bug, Bug Details, Dashboard and Reports all show the same bugs.
+   Phase 1: the Report Bug form is validated but nothing is saved.
+   Loaded as an ES module (<script type="module">).
    ========================================================================== */
 
 import { getBugs, addBug, getProjects, getCurrentUser, getUserById } from './storage.js';
+import { showDemoSaved, showFormErrors, clearFieldError } from './ui.js';
 
 const BugStore = { getBugs, getProjects };
 
@@ -62,13 +64,6 @@ const BugsListPage = (() => {
     document.getElementById('clearFiltersBtn')?.addEventListener('click', clearFilters);
     document.getElementById('reportBugBtn')?.addEventListener('click', () => {
       window.location.href = 'report-bug.html';
-    });
-    // Coming back with the browser's Back button can show a cached copy of the page;
-    // reload the bugs so changes made on Bug Details appear.
-    window.addEventListener('pageshow', (event) => {
-      if (!event.persisted) return;
-      allBugs = BugStore.getBugs() || [];
-      render();
     });
   }
 
@@ -204,6 +199,8 @@ const ReportBugPage = (() => {
 
     populateProjects();
     form.addEventListener('submit', handleSubmit);
+    form.addEventListener('input', (e) => clearFieldError(e.target));
+    form.addEventListener('change', (e) => clearFieldError(e.target));
     document.getElementById('cancelBugBtn')?.addEventListener('click', () => {
       window.location.href = 'bugs.html';
     });
@@ -247,13 +244,14 @@ const ReportBugPage = (() => {
       projectId: form.projectId.value
     };
 
-    const errors = validate(data);
-    if (Object.keys(errors).length > 0) return;
+    // Shows each message under its field; returns false if there are errors
+    if (!showFormErrors(form, validate(data))) return;
 
     isSubmitting = true;
     const user = CurrentUser.get();
 
-    // addBug fills in the id, status "Open", timestamps, history, comments and attachments
+    // Phase 1: addBug saves nothing. Phase 2: the server fills in the id, status,
+    // timestamps and history, and this can go to bugs.html again.
     addBug({
       title: data.title.trim(),
       description: data.description.trim(),
@@ -262,7 +260,9 @@ const ReportBugPage = (() => {
       projectId: data.projectId
     }, user?.id);
 
-    window.location.href = 'bugs.html';
+    showDemoSaved(`Bug "${data.title.trim()}" reported.`);
+    form.reset();
+    isSubmitting = false;
   }
 
   return { init };

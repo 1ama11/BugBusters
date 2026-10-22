@@ -1,10 +1,13 @@
 /**
  * settings.js — Settings page
  *   Personal (every user): profile, preferences, notifications
- *   Workspace (Admin only): system settings, reset demo data
+ *   Workspace (Admin only): system settings
+ *
+ * Phase 1: every form is validated, but nothing is saved. After a valid
+ * change the page shows a "demo only" toast and goes back to the defaults.
  */
 
-import { initLayout, refreshLayout } from './app.js';
+import { initLayout } from './app.js';
 import {
   getCurrentUser,
   updateUser,
@@ -12,7 +15,6 @@ import {
   updateUserPreferences,
   getSystemSettings,
   updateSystemSettings,
-  resetDemoData,
   nowISO,
 } from './storage.js';
 import { hasPermission } from './auth.js';
@@ -23,10 +25,10 @@ import {
   roleBadge,
   formatDate,
   showToast,
+  showDemoSaved,
   showFormErrors,
   clearFormErrors,
   confirmDialog,
-  setFlash,
 } from './ui.js';
 
 const currentUser = initLayout({ pageId: 'settings' });
@@ -85,14 +87,13 @@ function initProfile() {
     else if (name.length < 3) errors.name = 'Full name must be at least 3 characters.';
     if (!showFormErrors(form, errors)) return;
 
-    const updated = updateUser(currentUser.id, { name, jobTitle });
-    renderProfileSummary(updated);
-    refreshLayout(); // top bar shows the new name immediately
-    showToast('Profile saved.', 'success');
+    updateUser(currentUser.id, { name, jobTitle });
+    showDemoSaved('Profile updated.');
+    fill();
   });
 }
 
-/* ===================== Preferences (auto-save) ===================== */
+/* ===================== Preferences ===================== */
 
 function initPreferences() {
   const prefs = getUserPreferences(currentUser.id);
@@ -102,24 +103,22 @@ function initPreferences() {
 
   dateSelect.value = prefs.dateFormat;
   sidebarToggle.checked = prefs.sidebarCollapsed;
-  const updatePreview = () => { preview.textContent = formatDate(nowISO(), { time: true }); };
-  updatePreview();
+  preview.textContent = formatDate(nowISO(), { time: true });
 
   dateSelect.addEventListener('change', () => {
     updateUserPreferences(currentUser.id, { dateFormat: dateSelect.value });
-    updatePreview();
-    renderProfileSummary(getCurrentUser());
-    showToast('Date format saved.', 'success', 2000);
+    showDemoSaved('Date format changed.');
+    dateSelect.value = prefs.dateFormat;
   });
 
   sidebarToggle.addEventListener('change', () => {
     updateUserPreferences(currentUser.id, { sidebarCollapsed: sidebarToggle.checked });
-    refreshLayout();
-    showToast('Sidebar preference saved.', 'success', 2000);
+    showDemoSaved('Sidebar preference changed.');
+    sidebarToggle.checked = prefs.sidebarCollapsed;
   });
 }
 
-/* ===================== Notifications (simulated, auto-save) ===================== */
+/* ===================== Notifications (simulated) ===================== */
 
 function initNotifications() {
   const container = document.getElementById('notification-toggles');
@@ -141,22 +140,24 @@ function initNotifications() {
     const key = event.target.dataset.key;
     if (!key) return;
     updateUserPreferences(currentUser.id, { notifications: { [key]: event.target.checked } });
-    showToast('Notification preference saved.', 'success', 2000);
+    showDemoSaved('Notification preference changed.');
+    event.target.checked = prefs[key];
   });
 
   const channelInputs = document.querySelectorAll('input[name="channel"]');
+  const resetChannel = () => channelInputs.forEach((input) => { input.checked = input.value === prefs.channel; });
+  resetChannel();
   channelInputs.forEach((input) => {
-    input.checked = input.value === prefs.channel;
     input.addEventListener('change', () => {
       updateUserPreferences(currentUser.id, { notifications: { channel: input.value } });
-      showToast('Delivery channel saved.', 'success', 2000);
+      showDemoSaved('Delivery channel changed.');
+      resetChannel();
     });
   });
 
   document.getElementById('test-notification').addEventListener('click', () => {
-    const current = getUserPreferences(currentUser.id).notifications;
-    const enabled = NOTIFICATION_OPTIONS.filter((o) => current[o.key]).length;
-    const channel = { 'in-app': 'in-app', email: 'email', both: 'in-app and email' }[current.channel];
+    const enabled = NOTIFICATION_OPTIONS.filter((o) => prefs[o.key]).length;
+    const channel = { 'in-app': 'in-app', email: 'email', both: 'in-app and email' }[prefs.channel];
     if (enabled === 0) {
       showToast('All notification types are turned off, so nothing would be sent.', 'warning');
       return;
@@ -172,7 +173,6 @@ function initSystem() {
   const form = document.getElementById('system-form');
   document.getElementById('system-locked').hidden = isAdmin;
   form.hidden = !isAdmin;
-  document.getElementById('danger-zone').hidden = !isAdmin;
   if (!isAdmin) return; // non-admins never get the controls wired up
 
   form.elements.defaultBugPriority.innerHTML = BUG_PRIORITIES.map((p) => `<option value="${p}">${p}</option>`).join('');
@@ -221,21 +221,8 @@ function initSystem() {
     }
 
     updateSystemSettings(data);
-    refreshLayout(); // app name in the sidebar
-    showToast('System settings saved.', 'success');
-  });
-
-  document.getElementById('reset-data').addEventListener('click', async () => {
-    const ok = await confirmDialog({
-      title: 'Reset all demo data?',
-      message: 'Every user, project, bug and setting saved in this browser will be replaced with the original sample data. This cannot be undone.',
-      confirmText: 'Reset everything',
-      danger: true,
-    });
-    if (!ok) return;
-    resetDemoData();
-    setFlash('Demo data was reset. Sign in again to continue.', 'success');
-    window.location.href = 'login.html';
+    showDemoSaved('System settings updated.');
+    fill();
   });
 }
 

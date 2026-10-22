@@ -92,7 +92,7 @@
               <div class="card__header">
                 <div>
                   <h3 class="card__title" id="preferences-title">Preferences</h3>
-                  <p class="card__subtitle">Changes are saved automatically.</p>
+                  <p class="card__subtitle">Phase 1 demo: changes are not saved.</p>
                 </div>
                 <span class="scope-tag scope-tag--personal">Personal</span>
               </div>
@@ -123,12 +123,12 @@
               <div class="card__header">
                 <div>
                   <h3 class="card__title" id="notifications-title">Notifications</h3>
-                  <p class="card__subtitle">Choose what you'd like to hear about. Saved automatically.</p>
+                  <p class="card__subtitle">Choose what you'd like to hear about.</p>
                 </div>
                 <span class="badge badge--warning"><span class="badge__dot"></span>Simulated</span>
               </div>
               <div class="card__body">
-                <p class="alert alert--info"><span data-icon="info"></span><span>There is no email server in this demo. These choices are saved and can be read by other pages through <code>getUserPreferences()</code>.</span></p>
+                <p class="alert alert--info"><span data-icon="info"></span><span>There is no email server in this demo, and in Phase 1 these choices are not saved. Saving arrives with the Phase 2 backend.</span></p>
                 <div class="setting-rows mt-4" id="notification-toggles"></div>
 
                 <fieldset class="channel-picker">
@@ -214,17 +214,6 @@
                   <button type="submit" class="btn btn--primary">Save system settings</button>
                 </div>
               </form>
-            </section>
-
-            <!-- Danger zone (Admin only) -->
-            <section class="card settings-card danger-zone" id="danger-zone" aria-labelledby="danger-title" hidden>
-              <div class="card__body danger-zone__body">
-                <div>
-                  <h3 class="card__title" id="danger-title">Reset demo data</h3>
-                  <p class="text-sm text-muted">Deletes every change saved in this browser (users, projects, bugs, settings) and restores the original sample data. You will be signed out.</p>
-                </div>
-                <button type="button" class="btn btn--danger-outline" id="reset-data"><span data-icon="refresh"></span>Reset data</button>
-              </div>
             </section>
           </div>
         </div>

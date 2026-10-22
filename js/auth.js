@@ -3,37 +3,25 @@
  * ------------------------------------------------------------------
  * SIMULATED authentication + role-based UI permissions.
  *
- * ⚠️  This is a front-end demo. There is no server, passwords are not
- *     stored or checked, and anyone can edit localStorage in DevTools.
- *     These checks only control what the UI shows. Never use this
- *     design for real authentication.
+ * ⚠️  PHASE 1 is fully static: there is no real login. The forms check
+ *     what was typed, then open the dashboard as the demo Admin
+ *     (see getCurrentUser() in storage.js). Nothing is stored.
+ *     Real sign-in and sessions come with the Phase 2 backend.
+ *     The permission checks below only control what the UI shows.
  *
  * Contents:
  *   1. Permissions        hasPermission(), canEditProject(), canUpdateBug()
  *   2. Validation         isValidEmail(), validateRegistration()
- *   3. Auth actions       login(), register(), logout(), requireAuth()
+ *   3. Auth actions       logout(), requireAuth()
  *   4. Page controllers   initLoginPage(), initRegisterPage()
  * ------------------------------------------------------------------
  */
 
-import {
-  initStorage,
-  getCurrentUser,
-  getUserByEmail,
-  addUser,
-  updateUser,
-  saveSession,
-  clearSession,
-  getSystemSettings,
-  nowISO,
-} from './storage.js';
+import { getCurrentUser, getUserByEmail, getSystemSettings } from './storage.js';
 import { ROLES, ROLE_LIST, PUBLIC_ROLES } from './mock-data.js';
 import {
   icon,
-  escapeHTML,
   showToast,
-  setFlash,
-  consumeFlash,
   showFormErrors,
   clearFieldError,
   setFieldError,
@@ -140,72 +128,20 @@ export function passwordStrength(password = '') {
  * 3. AUTH ACTIONS
  * ================================================================= */
 
-/**
- * Simulated login. Any non-empty password is accepted for an existing active account.
- * Returns { ok: true, user } or { ok: false, error }.
- */
-export function login(email, password, remember = true) {
-  const user = getUserByEmail(email);
-  if (!user || !password) {
-    // A real app should use one generic message so it doesn't reveal which emails exist.
-    return { ok: false, error: 'Email or password is incorrect.' };
-  }
-  if (user.status !== 'Active') {
-    return { ok: false, error: 'This account has been deactivated. Please contact an administrator.' };
-  }
-  updateUser(user.id, { lastLoginAt: nowISO() });
-  saveSession(user.id, remember);
-  return { ok: true, user };
-}
-
-/**
- * Register a new account. The password is validated and then DISCARDED —
- * it is never written to localStorage.
- * Returns { ok: true, user } or { ok: false, errors }.
- */
-export function register(formData) {
-  if (!getSystemSettings().allowRegistration) {
-    return { ok: false, errors: { form: 'Public registration is currently disabled by an administrator.' } };
-  }
-  const errors = validateRegistration(formData);
-  if (Object.keys(errors).length) return { ok: false, errors };
-
-  const user = addUser({
-    name: formData.name.trim(),
-    email: formData.email.trim().toLowerCase(),
-    role: formData.role,
-    status: 'Active',
-  });
-  return { ok: true, user };
-}
-
-export function logout(message = 'You have been signed out.') {
-  clearSession();
-  setFlash(message, 'info');
+/** Phase 1: nothing to sign out of, so this just goes back to the login page. */
+export function logout() {
   window.location.href = 'login.html';
 }
 
-/** Only allow redirects to pages inside /pages (prevents open-redirect tricks via ?redirect=). */
-export function safeRedirect(target, fallback = 'dashboard.html') {
-  return /^[a-z0-9-]+\.html(\?[\w=&%.-]*)?$/i.test(target || '') ? target : fallback;
-}
-
 /**
- * Guard a page. Call at the top of every protected page (initLayout does it for you).
- *   - not logged in       -> login.html?redirect=<this page>
- *   - missing permission  -> dashboard.html with an error toast
+ * Permission check for a page (initLayout does it for you).
+ * Phase 1 always acts as the demo Admin, so this passes; it is kept for Phase 2.
+ *   - missing permission  -> dashboard.html
  * Returns the current user, or null if a redirect happened.
  */
 export function requireAuth(permission = null) {
   const user = getCurrentUser();
-  const currentPage = window.location.pathname.split('/').pop() + window.location.search;
-
-  if (!user) {
-    window.location.replace(`login.html?redirect=${encodeURIComponent(currentPage)}`);
-    return null;
-  }
   if (permission && !hasPermission(user, permission)) {
-    setFlash("You don't have permission to view that page.", 'error');
     window.location.replace('dashboard.html');
     return null;
   }
@@ -243,54 +179,24 @@ function setLoading(button, loading, label) {
   if (label) button.querySelector('.btn__label').textContent = label;
 }
 
+/**
+ * Login page. Phase 1: the email and password are only checked for format,
+ * then the dashboard opens as the demo Admin. Nothing is sent or stored.
+ */
 export function initLoginPage() {
-  initStorage();
-  const redirectTo = safeRedirect(new URLSearchParams(location.search).get('redirect'));
-
-  if (getCurrentUser()) {
-    window.location.replace(redirectTo);
-    return;
-  }
-
   fillAppName();
   initPasswordToggles();
 
   const form = document.getElementById('login-form');
-  const alertBox = document.getElementById('login-alert');
   const submitBtn = form.querySelector('[type="submit"]');
 
-  const flash = consumeFlash();
-  if (flash?.message) showToast(flash.message, flash.type);
-  if (flash?.email) {
-    form.elements.email.value = flash.email;
-    form.elements.password.focus();
-  }
-
-  const showAlert = (message) => {
-    alertBox.innerHTML = `${icon('alert', 18)}<span>${escapeHTML(message)}</span>`;
-    alertBox.hidden = false;
-  };
-
   // Clear a field's error as soon as the user edits it
-  form.addEventListener('input', (event) => {
-    clearFieldError(event.target);
-    alertBox.hidden = true;
-  });
-
-  // Demo account shortcuts
-  document.querySelectorAll('[data-demo-email]').forEach((button) => {
-    button.addEventListener('click', () => {
-      form.elements.email.value = button.dataset.demoEmail;
-      form.elements.password.value = 'demo1234';
-      form.requestSubmit();
-    });
-  });
+  form.addEventListener('input', (event) => clearFieldError(event.target));
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const email = form.elements.email.value.trim();
     const password = form.elements.password.value;
-    const remember = form.elements.remember.checked;
 
     const errors = {};
     if (!email) errors.email = 'Email is required.';
@@ -300,27 +206,15 @@ export function initLoginPage() {
 
     setLoading(submitBtn, true, 'Signing in…');
     // Small delay so the loading state is visible (there is no real network call)
-    setTimeout(() => {
-      const result = login(email, password, remember);
-      if (!result.ok) {
-        setLoading(submitBtn, false, 'Sign in');
-        showAlert(result.error);
-        form.elements.password.select();
-        return;
-      }
-      setFlash(`Welcome back, ${result.user.name.split(' ')[0]}!`, 'success');
-      window.location.href = redirectTo;
-    }, 350);
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 350);
   });
 }
 
+/**
+ * Register page. Phase 1: the form is fully validated, then the dashboard
+ * opens as the demo Admin. No account is created.
+ */
 export function initRegisterPage() {
-  initStorage();
-  if (getCurrentUser()) {
-    window.location.replace('dashboard.html');
-    return;
-  }
-
   fillAppName();
   initPasswordToggles();
 
@@ -380,22 +274,17 @@ export function initRegisterPage() {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     alertBox.hidden = true;
-    const result = register(readForm());
+    const errors = validateRegistration(readForm());
 
-    if (!result.ok) {
-      if (result.errors.form) {
-        alertBox.innerHTML = `${icon('alert', 18)}<span>${escapeHTML(result.errors.form)}</span>`;
-        alertBox.hidden = false;
-      }
-      showFormErrors(form, result.errors);
+    if (Object.keys(errors).length) {
+      showFormErrors(form, errors);
       showToast('Please fix the highlighted fields.', 'error');
       return;
     }
 
     fieldset.disabled = true;
-    setLoading(submitBtn, true, 'Account created');
-    showToast(`Account created for ${result.user.name}. Redirecting to sign in…`, 'success');
-    setFlash('Your account is ready. Sign in to continue.', 'success', { email: result.user.email });
-    setTimeout(() => { window.location.href = 'login.html'; }, 1400);
+    setLoading(submitBtn, true, 'Opening dashboard…');
+    showToast('Demo: no account is created in Phase 1. Opening the dashboard…', 'info');
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1400);
   });
 }

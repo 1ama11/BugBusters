@@ -20,9 +20,11 @@ The main objective of the Bug Tracking System is to **improve software quality, 
 
 # BugTrack — Bug Tracking System (Phase 1: Frontend)
 
-A university project: a bug tracker for developers, testers, project managers and admins, built with **HTML5, CSS3 and vanilla JavaScript (ES modules)** only. There is no backend: data lives in the browser's `localStorage`.
+A university project: a bug tracker for developers, testers, project managers and admins, built with **HTML5, CSS3 and vanilla JavaScript (ES modules)** only.
 
-> ⚠️ **Simulated authentication.** Passwords are never stored or checked; any non-empty password works for an existing, active account. Role checks only control what the UI shows — anyone can edit `localStorage` in DevTools. Never use this design for real authentication.
+**Phase 1 is fully static.** Pages show the sample data from `js/mock-data.js`, and nothing is saved anywhere — no `localStorage`, no `sessionStorage`, no backend. Forms still validate, but a valid submit only shows a *"Demo: … Nothing was saved"* toast. The database and backend arrive in **Phase 2**.
+
+> ⚠️ **No real login in Phase 1.** Any valid email and password opens the app as the demo **Admin** (Sarah Mitchell), so every page and button is visible. Role checks only control what the UI shows.
 
 ---
 
@@ -33,22 +35,22 @@ ES modules (`import` / `export`) do **not** work when you double-click an HTML f
 1. Open the `Bug-Tracking-System` folder in VS Code (**File → Open Folder**).
 2. Install the **Live Server** extension (by Ritwick Dey).
 3. Right-click `index.html` → **Open with Live Server**.
-4. You'll land on the login page. Click any **Demo account** button to sign in.
+4. You'll land on the login page. Enter any valid email and any password to open the dashboard.
 
 Any other static server works too, e.g. `python -m http.server 5500` and open `http://localhost:5500`.
 
-### Demo accounts (password: anything non-empty)
+### Sample data
 
-| Role            | Email                   | Name           | Can do                                                       |
-|-----------------|-------------------------|----------------|--------------------------------------------------------------|
-| Admin           | `admin@bugtracker.dev`  | Sarah Mitchell | Everything, incl. User Management and System settings        |
-| Project Manager | `pm@bugtracker.dev`     | Karim Mostafa  | Create projects, edit projects they manage, report/assign bugs |
-| Tester          | `tester@bugtracker.dev` | Omar Hassan    | Report and assign bugs                                       |
-| Developer       | `dev@bugtracker.dev`    | Lina Farouk    | View bugs, update bugs assigned to them                      |
+12 users (2 inactive), 5 projects and 14 bugs, all in `js/mock-data.js`. The app always acts as the Admin, `USER-001` Sarah Mitchell (`DEMO_USER_ID` in `js/storage.js`). To preview another role while developing, change `DEMO_USER_ID` to another user's id:
 
-There are 12 users in total (2 inactive — they can't sign in), 5 projects and 14 bugs.
+| Role            | User id    | Name           | Can do                                                       |
+|-----------------|------------|----------------|--------------------------------------------------------------|
+| Admin           | `USER-001` | Sarah Mitchell | Everything, incl. User Management and System settings        |
+| Project Manager | `USER-004` | Karim Mostafa  | Create projects, edit projects they manage, report/assign bugs |
+| Tester          | `USER-002` | Omar Hassan    | Report and assign bugs                                       |
+| Developer       | `USER-003` | Lina Farouk    | View bugs, update bugs assigned to them                      |
 
-**Reset everything:** sign in as Admin → Settings → *Reset demo data*. Or in DevTools run `localStorage.clear()` and reload.
+Because nothing is saved, reloading a page always shows the original sample data.
 
 ---
 
@@ -56,17 +58,17 @@ There are 12 users in total (2 inactive — they can't sign in), 5 projects and 
 
 ```
 Bug-Tracking-System/
-├── index.html               Redirects to dashboard (signed in) or login
+├── index.html               Redirects to the login page
 ├── pages/
 │   ├── login.html           ✅ Person 1
 │   ├── register.html        ✅ Person 1
 │   ├── users.html           ✅ Person 5 (Admin only)
 │   ├── projects.html        ✅ Person 5
 │   ├── settings.html        ✅ Person 5
-│   ├── dashboard.html       ⏳ placeholder → Person 2
-│   ├── reports.html         ⏳ placeholder → Person 2
-│   ├── bugs.html            ⏳ placeholder → Person 3
-│   ├── report-bug.html      ⏳ placeholder → Person 3
+│   ├── dashboard.html       ✅ Person 2
+│   ├── reports.html         ✅ Person 2 (Chart.js from CDN)
+│   ├── bugs.html            ✅ Person 3
+│   ├── report-bug.html      ✅ Person 3
 │   └── bug-details.html     ✅ Person 4
 ├── css/
 │   ├── style.css            Design tokens + ALL shared components (link first)
@@ -75,17 +77,15 @@ Bug-Tracking-System/
 │   ├── bug-details.css      Bug details page only
 │   └── responsive.css       All breakpoints (link last)
 ├── js/
-│   ├── mock-data.js         Constants + sample data (only used for seeding)
-│   ├── storage.js           The ONLY file that touches localStorage
-│   ├── ui.js                Toasts, modals, confirm, badges, avatars, dates, form errors, icons
-│   ├── auth.js              Permissions, login/register/logout, page guard
+│   ├── mock-data.js         Constants + sample data (Phase 1's only data source)
+│   ├── storage.js           Data layer: every page reads/writes through it (Phase 2 → backend)
+│   ├── ui.js                Toasts, demo-save notice, modals, confirm, badges, avatars, dates, form errors, icons
+│   ├── auth.js              Permissions, form validation, login/register pages
 │   ├── app.js               Shared layout: sidebar, top bar, profile menu
 │   ├── users.js | projects.js | settings.js | bug-details.js   Page scripts
 ├── assets/icons/favicon.svg, assets/images/logo.svg
 └── README.md
 ```
-
-The placeholder pages exist so every sidebar link works and the login redirect has somewhere to go. Each one already has the shared layout — teammates replace the content inside `<main>`.
 
 **One file beyond the original plan:** `js/ui.js`. Toast/modal helpers are needed by both `auth.js` (login page) and `app.js` (which imports `auth.js`). Putting them in `app.js` would create a circular import, so they live in their own module.
 
@@ -101,22 +101,16 @@ No file imports "upwards", so there are no circular imports.
 
 ## 3. How it works
 
-- **Seeding:** `initStorage()` copies sample data into `localStorage` only when a key doesn't exist yet. Reloading never overwrites your changes.
-- **Session:** login saves `{ userId, loginAt, remember }` under `bugtracker.session` — in `localStorage` when *Keep me signed in* is checked, otherwise in `sessionStorage` (cleared when the tab closes). Admins can set a session timeout in Settings.
-- **Page guard:** every protected page calls `initLayout()`. If you're not signed in you go to `login.html?redirect=<page>`; if your role lacks the page's permission you go to the dashboard with an error toast. The page body stays hidden (`body.is-loading`) until this check passes, so unauthorized content never flashes.
-- **Deactivated users** are signed out on their next page load and can't sign in.
-- **Registration** validates the password (8+ chars, must match), then discards it. Admin can't be chosen; admins can disable registration entirely in System settings.
+- **Data:** `storage.js` read functions (`getBugs()`, `getUsers()`…) return a fresh copy of the sample data in `mock-data.js`. Write functions (`addBug()`, `updateBug()`, `addComment()`, `addUser()`…) keep their names but **save nothing** and return `null`.
+- **Forms:** every form still validates and shows its errors. A valid submit calls the write function, then shows `showDemoSaved(message)` — *"Demo: … Nothing was saved. Saving arrives in Phase 2."* — and the form resets. The page shows the unchanged sample data.
+- **Login / register:** the forms are validated, then open the dashboard. No account is checked or created. `getCurrentUser()` always returns the demo Admin. Log out just goes back to the login page.
+- **Page permissions:** every app page calls `initLayout()`, which still checks the page's permission (`requireAuth()`), so roles keep working once Phase 2 adds real users. With the demo Admin it always passes.
+- **Preferences** (date format, collapsed sidebar, notifications) use the defaults from `mock-data.js`; changes aren't remembered.
+- **Registration** validates the password (8+ chars, must match) and the role (Admin can't be chosen).
 
-### localStorage keys
+### Phase 2: connecting the backend
 
-| Key                   | Contents                                                    |
-|-----------------------|-------------------------------------------------------------|
-| `bugtracker.users`    | Array of users                                              |
-| `bugtracker.projects` | Array of projects                                           |
-| `bugtracker.bugs`     | Array of bugs (comments + history embedded in each bug)     |
-| `bugtracker.session`  | Current session (localStorage or sessionStorage)            |
-| `bugtracker.settings` | `{ system: {...}, userPreferences: { [userId]: {...} } }`   |
-| `bugtracker.flash`    | (sessionStorage) one-time toast shown after a redirect      |
+Only `js/storage.js` (and the session part of `js/auth.js`) should need to change: replace the inside of each function with a call to the API, keeping the names and parameters. Then remove the `showDemoSaved(...)` calls in the page scripts (search for `showDemoSaved`) and show a real success message after the request succeeds. Redirect messages (e.g. *"Bug reported"* after going back to the list) were removed in Phase 1 because they needed `sessionStorage`; bring them back with the backend if needed.
 
 ### Permissions (`PERMISSIONS` in `js/auth.js`)
 
@@ -189,37 +183,28 @@ Pass `permission` to protect a page: `initLayout({ pageId: 'report-bug', permiss
 
 ### 4.2 Data functions — `js/storage.js`
 
-Never call `localStorage` directly. Use these:
+Never import `mock-data.js` arrays directly. Use these, so Phase 2 only has to change `storage.js`:
 
 | Function | Returns / does |
 |---|---|
 | `getUsers()`, `getUserById(id)`, `getUserByEmail(email)` | Users |
-| `addUser(user)`, `updateUser(id, changes)` | Create / merge changes |
 | `getProjects()`, `getProjectById(id)` | Projects |
-| `addProject(p)`, `updateProject(id, changes)` | `updatedAt` set automatically |
 | `getProjectStats(projectId)` | `{ total, open, done, percentDone, byStatus, bugs }` |
 | `getBugs()`, `getBugById(id)` | Bugs |
 | `getBugsByProject(id)`, `getBugsAssignedTo(userId)`, `getBugsReportedBy(userId)` | Filtered bugs |
-| `addBug(fields, reporterId)` | Creates `BUG-0xx` with defaults, timestamps and a "created" history entry |
-| `updateBug(id, changes, actorId, note)` | Saves changes; **auto-logs** status / assignedTo / priority / severity / deadline changes in `history` when `actorId` is given |
-| `addComment(bugId, userId, text)` | Adds `CMT-0xx` comment |
-| `getCurrentUser()` | Logged-in user or `null` |
+| `getCurrentUser()` | Phase 1: always the demo Admin |
 | `getSystemSettings()` | `{ appName, defaultBugPriority, defaultBugSeverity, maxAttachmentSizeMB, … }` |
-| `getUserPreferences(userId)` | `{ dateFormat, sidebarCollapsed, notifications: {…} }` |
+| `getUserPreferences(userId)` | `{ dateFormat, sidebarCollapsed, notifications: {…} }` (defaults in Phase 1) |
+| `addUser`, `updateUser`, `addProject`, `updateProject`, `addBug`, `updateBug`, `addComment`, `updateSystemSettings`, `updateUserPreferences` | **Phase 1: save nothing, return `null`.** Phase 2: send the change to the backend |
 | `generateId(prefix, items)`, `nowISO()` | Helpers |
 
 Examples:
 
 ```js
-// Person 3 — Report Bug form
-const bug = addBug({
-  title, description, severity, priority,
-  projectId: form.project.value,
-  assignedTo: form.assignee.value || null,
-  deadline: form.deadline.value || null,      // "YYYY-MM-DD"
-}, user.id);
-setFlash(`${bug.id} reported.`, 'success');
-location.href = `bug-details.html?id=${bug.id}`;
+// Person 3 — Report Bug form (after validation passes)
+addBug({ title, description, severity, priority, projectId }, user.id); // Phase 1: saves nothing
+showDemoSaved(`Bug "${title}" reported.`);
+form.reset();
 
 // Person 3 — Bug list filtered by project (link from Projects page)
 const projectId = getQueryParam('project');           // bugs.html?project=PROJ-001
@@ -228,7 +213,7 @@ const bugs = projectId ? getBugsByProject(projectId) : getBugs();
 // Person 4 — Bug details
 const bug = getBugById(getQueryParam('id'));         // bug-details.html?id=BUG-001
 if (canUpdateBug(user, bug)) {
-  updateBug(bug.id, { status: 'Resolved' }, user.id, 'Fixed in v2.1'); // history entry added for you
+  updateBug(bug.id, { status: 'Resolved' }, user.id, 'Fixed in v2.1'); // Phase 1: saves nothing
 }
 addComment(bug.id, user.id, 'Verified on staging.');
 
@@ -249,7 +234,7 @@ if (hasPermission(user, 'bugs.assign')) { /* show assignee dropdown */ }
 |---|---|
 | `escapeHTML(text)` | **Always** wrap user text before putting it in `innerHTML` |
 | `showToast(msg, 'success' \| 'error' \| 'warning' \| 'info')` | Notification |
-| `setFlash(msg, type)` | Toast shown on the *next* page (after a redirect) |
+| `showDemoSaved(msg)` | Phase 1: call after a form passes validation — shows *"Demo: msg Nothing was saved…"* |
 | `openModal(id)`, `closeModal(id)` | Native `<dialog class="modal">`; any `[data-close-modal]` button closes it |
 | `await confirmDialog({ title, message, confirmText, danger })` | Returns `true`/`false` |
 | `badge(text)` | Coloured badge; colour chosen from the text (`Open`, `Critical`, `Resolved`…) |
@@ -282,7 +267,7 @@ if (hasPermission(user, 'bugs.assign')) { /* show assignee dropdown */ }
                field, from, to, by: userId, at, note }] }
 ```
 
-Attachments are stored as `data:` URLs (read with `FileReader.readAsDataURL`), so the Bug Details page can preview and download them. Use `generateId('ATT', allAttachments)` for the id. Keep files small — `localStorage` holds only about 5 MB in total; the Bug Details page scales screenshots down before saving.
+Attachments are stored as `data:` URLs (read with `FileReader.readAsDataURL`), so the Bug Details page can preview and download them. Use `generateId('ATT', allAttachments)` for the id. The Bug Details page scales screenshots down before uploading. In Phase 1, adding or removing an attachment is validated but not saved.
 
 Dates are local ISO strings without a timezone: `"2026-10-19T10:00:00"`. Use `nowISO()` to create one.
 

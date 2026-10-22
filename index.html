@@ -5,14 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BugTrack</title>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <!-- Entry point: Phase 1 has no sessions, so every visit starts at the login page. -->
+  <meta http-equiv="refresh" content="0; url=pages/login.html">
 </head>
 <body>
-  <!-- Entry point: sends the visitor to the dashboard (signed in) or the login page. -->
-  <noscript>This app needs JavaScript. Please enable it and open it through a local server (e.g. VS Code Live Server).</noscript>
-  <script type="module">
-    import { initStorage, getCurrentUser } from './js/storage.js';
-    initStorage();
-    window.location.replace(getCurrentUser() ? 'pages/dashboard.html' : 'pages/login.html');
-  </script>
+  <p><a href="pages/login.html">Continue to BugTrack</a></p>
 </body>
 </html>

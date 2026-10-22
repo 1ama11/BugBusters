@@ -10,23 +10,16 @@
  *   if (user) { ...render your page... }
  *
  * initLayout() will:
- *   1. seed localStorage on the first visit
- *   2. redirect to login (or dashboard) if the user may not see the page
- *   3. render the sidebar + top bar into #app-sidebar and #app-topbar
- *   4. show any pending flash message
- *   5. reveal the page (body.is-loading is removed)
+ *   1. redirect to the dashboard if the user may not see the page
+ *      (Phase 1 always acts as the demo Admin, so this never happens yet)
+ *   2. render the sidebar + top bar into #app-sidebar and #app-topbar
+ *   3. reveal the page (body.is-loading is removed)
  * ------------------------------------------------------------------
  */
 
-import {
-  initStorage,
-  getSystemSettings,
-  getUserPreferences,
-  updateUserPreferences,
-  getCurrentUser,
-} from './storage.js';
+import { getSystemSettings, getUserPreferences, getCurrentUser } from './storage.js';
 import { requireAuth, hasPermission, logout } from './auth.js';
-import { icon, escapeHTML, avatarHTML, roleBadge, showFlash, hydrateIcons } from './ui.js';
+import { icon, escapeHTML, avatarHTML, roleBadge, hydrateIcons } from './ui.js';
 
 /* ===================== Navigation config ===================== */
 /*
@@ -98,8 +91,8 @@ function renderSidebar(user, pageId) {
     </div>
     <nav class="sidebar__nav">${sectionsHTML}</nav>
     <div class="sidebar__footer">
-      <p class="demo-chip" title="No backend: data lives in your browser's localStorage">
-        ${icon('info', 14)}<span>Demo mode · simulated auth</span>
+      <p class="demo-chip" title="Phase 1: static sample data, nothing is saved">
+        ${icon('info', 14)}<span>Static demo · nothing is saved</span>
       </p>
       <button type="button" class="nav-link sidebar__collapse" id="sidebar-collapse" aria-label="Collapse sidebar">
         ${icon('chevrons-left', 18, 'nav-link__icon')}
@@ -176,16 +169,15 @@ function bindSidebar(user, signal) {
     if (event.key === 'Escape' && shell.classList.contains('sidebar-open')) { setMobileOpen(false); openBtn.focus(); }
   }, { signal });
 
-  // Desktop collapse (remembered per user)
+  // Desktop collapse (Phase 1: not remembered, every page starts with the default)
   const collapseBtn = document.getElementById('sidebar-collapse');
-  const setCollapsed = (collapsed, save = true) => {
+  const setCollapsed = (collapsed) => {
     shell.classList.toggle('sidebar-collapsed', collapsed);
     collapseBtn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     collapseBtn.setAttribute('aria-expanded', String(!collapsed));
     collapseBtn.querySelector('.nav-link__label').textContent = collapsed ? 'Expand' : 'Collapse';
-    if (save) updateUserPreferences(user.id, { sidebarCollapsed: collapsed });
   };
-  setCollapsed(getUserPreferences(user.id).sidebarCollapsed, false);
+  setCollapsed(getUserPreferences(user.id).sidebarCollapsed);
   collapseBtn.addEventListener('click', () => setCollapsed(!shell.classList.contains('sidebar-collapsed')));
 }
 
@@ -229,8 +221,6 @@ function bindProfileMenu(signal) {
  * @returns {object|null} The current user, or null if the user was redirected.
  */
 export function initLayout({ pageId, title, permission = null } = {}) {
-  initStorage();
-
   const navItem = NAV_ITEMS.find((item) => item.id === pageId);
   const user = requireAuth(permission || navItem?.permission || null);
   if (!user) return null;
@@ -238,7 +228,6 @@ export function initLayout({ pageId, title, permission = null } = {}) {
   layoutState = { pageId, title: title || navItem?.label || '' };
   renderLayout(user);
   hydrateIcons(document);
-  showFlash();
   document.body.classList.remove('is-loading');
   return user;
 }

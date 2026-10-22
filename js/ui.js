@@ -2,7 +2,7 @@
  * ui.js
  * ------------------------------------------------------------------
  * Small, reusable UI helpers shared by every page:
- *   icons, toasts, flash messages, modals, confirm dialogs,
+ *   icons, toasts, demo-save notices, modals, confirm dialogs,
  *   badges, avatars, date formatting and form error helpers.
  *
  * It lives in its own module (instead of inside app.js) so that
@@ -10,7 +10,7 @@
  * ------------------------------------------------------------------
  */
 
-import { getSession, getUserPreferences } from './storage.js';
+import { getCurrentUser, getUserPreferences } from './storage.js';
 
 /* ===================== Text safety ===================== */
 
@@ -122,31 +122,14 @@ export function showToast(message, type = 'info', duration = 3500) {
   return toast;
 }
 
-/* ===================== Flash messages ===================== */
-/* A message saved before a redirect and shown as a toast on the next page. */
-
-const FLASH_KEY = 'bugtracker.flash';
-
-export function setFlash(message, type = 'info', extra = {}) {
-  sessionStorage.setItem(FLASH_KEY, JSON.stringify({ message, type, ...extra }));
-}
-
-/** Returns the flash object (and removes it), or null. */
-export function consumeFlash() {
-  const raw = sessionStorage.getItem(FLASH_KEY);
-  sessionStorage.removeItem(FLASH_KEY);
-  try {
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-/** Show the pending flash message, if any. Called automatically by initLayout(). */
-export function showFlash() {
-  const flash = consumeFlash();
-  if (flash?.message) showToast(flash.message, flash.type);
-  return flash;
+/* ===================== Demo saves (Phase 1) ===================== */
+/*
+ * Phase 1 is fully static: forms still validate, but nothing is saved.
+ * Call this after a form passes validation, instead of a "saved" toast:
+ *   showDemoSaved(`${bug.id} moved to Resolved.`);
+ */
+export function showDemoSaved(message) {
+  showToast(`Demo: ${message} Nothing was saved. Saving arrives in Phase 2.`, 'info', 5000);
 }
 
 /* ===================== Modals (native <dialog>) ===================== */
@@ -243,8 +226,7 @@ export function parseDate(value) {
 }
 
 function currentDateFormat() {
-  const session = getSession();
-  return session ? getUserPreferences(session.userId).dateFormat : 'medium';
+  return getUserPreferences(getCurrentUser()?.id).dateFormat;
 }
 
 /**
@@ -355,7 +337,8 @@ export function setFieldError(input, message) {
 }
 
 export function clearFieldError(input) {
-  const field = input.closest('.field');
+  // Same lookup as getErrorElement, so forms without a .field wrapper are cleared too
+  const field = input.closest('.field') || input.parentElement;
   const error = field?.querySelector('.field-error');
   if (error) error.textContent = '';
   input.removeAttribute('aria-invalid');
