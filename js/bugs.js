@@ -1,7 +1,10 @@
+<<<<<<< Updated upstream
 /* ==========================================================================
    bugs.js — Bug Tracking Logic & Data Binding
    Includes mock data pre-populated to match the UI screenshot.
    ========================================================================== */
+=======
+>>>>>>> Stashed changes
 
 const DefaultBugs = [
   {
@@ -315,8 +318,12 @@ const ReportBugPage = (() => {
       projectId: form.projectId.value
     };
 
+<<<<<<< Updated upstream
     const errors = validate(data);
     if (Object.keys(errors).length > 0) return;
+=======
+    if (!showFormErrors(form, validate(data))) return;
+>>>>>>> Stashed changes
 
     isSubmitting = true;
     const bugs = BugStore.getBugs() || [];
@@ -324,8 +331,12 @@ const ReportBugPage = (() => {
     const projects = BugStore.getProjects() || [];
     const proj = projects.find(p => p.id === data.projectId);
 
+<<<<<<< Updated upstream
     const newBug = {
       id: generateBugId(bugs),
+=======
+    addBug({
+>>>>>>> Stashed changes
       title: data.title.trim(),
       description: data.description.trim(),
       severity: data.severity,
