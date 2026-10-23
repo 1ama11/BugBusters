@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body class="is-loading">
@@ -21,28 +22,72 @@
       <header class="topbar" id="app-topbar"></header>
 
       <main class="content" id="main-content" tabindex="-1">
-        <!-- ============================================================
-             PLACEHOLDER — owned by Person 2.
-             Replace everything inside <main> with your page content.
-             Keep the shell (sidebar, topbar, script import) as it is.
-             ============================================================ -->
-        <section class="card placeholder">
-          <span class="placeholder__icon" data-icon="layers" data-icon-size="24"></span>
-          <h2>Dashboard</h2>
-          <p>Overview cards, my assigned bugs and recent activity.</p>
-          <p class="text-sm">This page is a placeholder owned by <strong>Person 2</strong>. The shared layout, navigation and permissions already work — see the integration guide in <code>README.md</code>.</p>
+        <div class="page-header">
+          <div>
+            <h2 class="page-header__title" id="welcome-title">Dashboard</h2>
+            <p class="page-header__subtitle">Overview of your projects' bugs and recent activity.</p>
+          </div>
+          <div class="page-header__actions">
+            <a class="btn btn--primary" id="report-bug-btn" href="report-bug.html" hidden><span data-icon="plus"></span>Report bug</a>
+          </div>
+        </div>
+
+        <section class="stats-grid" aria-label="Bug statistics">
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="bug"></span>Total bugs</p>
+            <p class="stat-card__value" id="stat-total">0</p>
+          </article>
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="alert"></span>Open bugs</p>
+            <p class="stat-card__value" id="stat-open">0</p>
+            <p class="stat-card__hint" id="stat-open-hint"></p>
+          </article>
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="check-circle"></span>Resolved</p>
+            <p class="stat-card__value" id="stat-resolved">0</p>
+          </article>
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="check"></span>Closed</p>
+            <p class="stat-card__value" id="stat-closed">0</p>
+          </article>
         </section>
+
+        <div class="dash-grid">
+          <div class="dash-grid__main">
+            <section class="card" aria-labelledby="overview-title">
+              <div class="card__header">
+                <h3 class="card__title" id="overview-title">Bug overview</h3>
+              </div>
+              <div class="card__body">
+                <ul class="status-bars" id="status-breakdown" role="list"></ul>
+              </div>
+            </section>
+
+            <section class="card" aria-labelledby="my-bugs-title">
+              <div class="card__header">
+                <div>
+                  <h3 class="card__title" id="my-bugs-title">Assigned to me</h3>
+                  <p class="card__subtitle"><span id="my-bugs-count">0</span> open</p>
+                </div>
+                <a class="btn btn--ghost btn--sm" href="bugs.html">All bugs<span data-icon="arrow-right" data-icon-size="14"></span></a>
+              </div>
+              <div class="card__body" id="my-bugs"></div>
+            </section>
+          </div>
+
+          <section class="card" aria-labelledby="activity-title">
+            <div class="card__header">
+              <h3 class="card__title" id="activity-title">Recent activity</h3>
+            </div>
+            <div class="card__body">
+              <ul class="activity-list" id="activity-list" role="list"></ul>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
   </div>
 
-  <script type="module">
-    import { initLayout } from '../js/app.js';
-    // import { getBugs, getProjects, getCurrentUser, getBugsAssignedTo } from '../js/storage.js';
-    const user = initLayout({ pageId: 'dashboard' });
-    if (user) {
-      // Person 2: render your page here.
-    }
-  </script>
+  <script type="module" src="../js/dashboard.js"></script>
 </body>
 </html>

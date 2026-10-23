@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
-<<<<<<< HEAD
-=======
   <link rel="stylesheet" href="../css/bug-details.css">
->>>>>>> bug-details-(Abdelrahman)
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body class="is-loading">
@@ -25,19 +22,6 @@
       <header class="topbar" id="app-topbar"></header>
 
       <main class="content" id="main-content" tabindex="-1">
-<<<<<<< HEAD
-        <!-- ============================================================
-             PLACEHOLDER — owned by Person 4.
-             Replace everything inside <main> with your page content.
-             Keep the shell (sidebar, topbar, script import) as it is.
-             ============================================================ -->
-        <section class="card placeholder">
-          <span class="placeholder__icon" data-icon="layers" data-icon-size="24"></span>
-          <h2>Bug Details &amp; Status Tracking</h2>
-          <p>Full bug view with comments and status history. Opened as bug-details.html?id=BUG-001.</p>
-          <p class="text-sm">This page is a placeholder owned by <strong>Person 4</strong>. The shared layout, navigation and permissions already work — see the integration guide in <code>README.md</code>.</p>
-        </section>
-=======
         <!-- Shown when ?id= is missing or the bug doesn't exist -->
         <section class="card bug-missing" id="bug-missing" hidden></section>
 
@@ -200,21 +184,10 @@
             </aside>
           </div>
         </article>
->>>>>>> bug-details-(Abdelrahman)
       </main>
     </div>
   </div>
 
-<<<<<<< HEAD
-  <script type="module">
-    import { initLayout } from '../js/app.js';
-    // import { getBugById, updateBug, addComment } from '../js/storage.js';
-    const user = initLayout({ pageId: 'bugs', title: 'Bug Details' });
-    if (user) {
-      // Person 4: render your page here.
-    }
-  </script>
-=======
   <!-- Change status -->
   <dialog class="modal modal--sm" id="status-modal" aria-labelledby="status-modal-title">
     <form id="status-form" novalidate>
@@ -260,6 +233,5 @@
   </dialog>
 
   <script type="module" src="../js/bug-details.js"></script>
->>>>>>> bug-details-(Abdelrahman)
 </body>
 </html>

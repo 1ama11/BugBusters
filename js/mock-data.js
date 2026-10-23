@@ -3,10 +3,9 @@
  * ------------------------------------------------------------------
  * Shared constants + realistic sample data for the Bug Tracking System.
  *
- * This file is ONLY used to seed localStorage on the first visit
- * (see initStorage() in storage.js). Pages should never read these
- * arrays directly — always go through storage.js so that user changes
- * are respected.
+ * Phase 1: this is the app's only data source. Pages should never read
+ * these arrays directly — always go through storage.js, so that in
+ * Phase 2 only storage.js has to change to use the backend.
  *
  * ID conventions (keep these consistent across the team):
  *   Users     USER-001   Projects  PROJ-001   Bugs     BUG-001
@@ -123,12 +122,8 @@ export const MOCK_PROJECTS = [
 /*
  * comments: [{ id, userId, text, createdAt }]
  * history:  [{ id, type, field, from, to, by, at, note }]
-<<<<<<< HEAD
- *   type is one of: "created" | "status" | "assignment" | "priority" | "severity" | "update"
-=======
  *   type is one of: "created" | "status" | "assignment" | "priority" | "severity" | "deadline" | "update"
  * attachments: [{ id: 'ATT-001', name, type, size, dataUrl, uploadedBy, uploadedAt }]
->>>>>>> bug-details-(Abdelrahman)
  */
 export const MOCK_BUGS = [
   {
@@ -345,7 +340,6 @@ export const DEFAULT_SYSTEM_SETTINGS = {
 };
 
 export const DEFAULT_USER_PREFERENCES = {
-  theme: 'light',            // 'light' | 'dark'
   dateFormat: 'medium',      // 'medium' (Oct 19, 2026) | 'dmy' (19/10/2026) | 'iso' (2026-10-19)
   sidebarCollapsed: false,
   notifications: {
@@ -355,13 +349,5 @@ export const DEFAULT_USER_PREFERENCES = {
     projectUpdates: false,
     weeklySummary: false,
     channel: 'in-app',       // 'in-app' | 'email' | 'both'
-  },
-};
-
-/** Shape stored under the "bugtracker.settings" key. */
-export const MOCK_SETTINGS = {
-  system: { ...DEFAULT_SYSTEM_SETTINGS },
-  userPreferences: {
-    // userId -> preferences. Missing users fall back to DEFAULT_USER_PREFERENCES.
   },
 };

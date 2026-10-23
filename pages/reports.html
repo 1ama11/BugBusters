@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/responsive.css">
+  <!-- Chart.js (global `Chart`), used by js/reports.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -21,28 +24,79 @@
       <header class="topbar" id="app-topbar"></header>
 
       <main class="content" id="main-content" tabindex="-1">
-        <!-- ============================================================
-             PLACEHOLDER — owned by Person 2.
-             Replace everything inside <main> with your page content.
-             Keep the shell (sidebar, topbar, script import) as it is.
-             ============================================================ -->
-        <section class="card placeholder">
-          <span class="placeholder__icon" data-icon="layers" data-icon-size="24"></span>
-          <h2>Reports &amp; Analytics</h2>
-          <p>Charts and summaries by status, severity, project and assignee.</p>
-          <p class="text-sm">This page is a placeholder owned by <strong>Person 2</strong>. The shared layout, navigation and permissions already work — see the integration guide in <code>README.md</code>.</p>
+        <div class="page-header">
+          <div>
+            <h2 class="page-header__title">Reports &amp; Analytics</h2>
+            <p class="page-header__subtitle">Analyze bug trends and resolution performance.</p>
+          </div>
+        </div>
+
+        <section class="stats-grid" aria-label="Report statistics">
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="calendar"></span>Avg. resolution time</p>
+            <p class="stat-card__value" id="stat-resolution">—</p>
+          </article>
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="alert"></span>Critical bugs open</p>
+            <p class="stat-card__value" id="stat-critical">0</p>
+          </article>
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="bug"></span>Reported this week</p>
+            <p class="stat-card__value" id="stat-week">0</p>
+          </article>
+          <article class="card stat-card">
+            <p class="stat-card__label"><span data-icon="check-circle"></span>Resolution rate</p>
+            <p class="stat-card__value" id="stat-rate">—</p>
+            <p class="stat-card__hint" id="stat-rate-hint"></p>
+          </article>
+        </section>
+
+        <div class="dash-grid">
+          <section class="card" aria-labelledby="trend-title">
+            <div class="card__header">
+              <div>
+                <h3 class="card__title" id="trend-title">Bug trends</h3>
+                <p class="card__subtitle">Reported vs. resolved, last 6 months</p>
+              </div>
+            </div>
+            <div class="card__body">
+              <div class="chart-box"><canvas id="trend-chart" role="img" aria-label="Line chart of bugs reported and resolved per month"></canvas></div>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="severity-title">
+            <div class="card__header">
+              <h3 class="card__title" id="severity-title">Bugs by severity</h3>
+            </div>
+            <div class="card__body">
+              <div class="chart-box"><canvas id="severity-chart" role="img" aria-label="Doughnut chart of bugs by severity"></canvas></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="card mt-6" aria-labelledby="projects-title">
+          <div class="card__header">
+            <h3 class="card__title" id="projects-title">Bugs by project</h3>
+          </div>
+          <div class="table-wrapper" id="project-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Project</th>
+                  <th scope="col" class="num">Total</th>
+                  <th scope="col" class="num">Open</th>
+                  <th scope="col" class="num">Critical open</th>
+                  <th scope="col">Done</th>
+                </tr>
+              </thead>
+              <tbody id="project-rows"></tbody>
+            </table>
+          </div>
         </section>
       </main>
     </div>
   </div>
 
-  <script type="module">
-    import { initLayout } from '../js/app.js';
-    // import { getBugs, getProjects, getProjectStats } from '../js/storage.js';
-    const user = initLayout({ pageId: 'reports' });
-    if (user) {
-      // Person 2: render your page here.
-    }
-  </script>
+  <script type="module" src="../js/reports.js"></script>
 </body>
 </html>

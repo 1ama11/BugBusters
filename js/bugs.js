@@ -244,11 +244,20 @@ const ReportBugPage = (() => {
       projectId: form.projectId.value
     };
 
+<<<<<<< HEAD
+=======
+    // Shows each message under its field; returns false if there are errors
+>>>>>>> main
     if (!showFormErrors(form, validate(data))) return;
 
     isSubmitting = true;
     const user = CurrentUser.get();
 
+<<<<<<< HEAD
+=======
+    // Phase 1: addBug saves nothing. Phase 2: the server fills in the id, status,
+    // timestamps and history, and this can go to bugs.html again.
+>>>>>>> main
     addBug({
       title: data.title.trim(),
       description: data.description.trim(),

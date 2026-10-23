@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,8 +51,6 @@
           <p class="auth-card__subtitle">Sign in to your workspace to continue.</p>
         </header>
 
-        <div class="alert alert--error" id="login-alert" role="alert" hidden></div>
-
         <form class="auth-form" id="login-form" novalidate>
           <div class="field">
             <label class="field__label" for="email">Email</label>
@@ -69,39 +67,14 @@
             <p class="field-error" id="password-error"></p>
           </div>
 
-          <div class="auth-form__row">
-            <label class="check">
-              <input type="checkbox" name="remember" checked>
-              <span>Keep me signed in</span>
-            </label>
-          </div>
-
           <button type="submit" class="btn btn--primary btn--lg btn--block"><span class="btn__label">Sign in</span></button>
         </form>
 
         <p class="auth-switch">Don't have an account? <a href="register.html">Create one</a></p>
 
-        <section class="demo-accounts" aria-labelledby="demo-title">
-          <h2 class="demo-accounts__title" id="demo-title">Demo accounts</h2>
-          <div class="demo-accounts__grid">
-            <button type="button" class="demo-btn" data-demo-email="admin@bugtracker.dev">
-              <span class="demo-btn__role">Admin</span><span class="demo-btn__email">admin@bugtracker.dev</span>
-            </button>
-            <button type="button" class="demo-btn" data-demo-email="pm@bugtracker.dev">
-              <span class="demo-btn__role">Project Manager</span><span class="demo-btn__email">pm@bugtracker.dev</span>
-            </button>
-            <button type="button" class="demo-btn" data-demo-email="tester@bugtracker.dev">
-              <span class="demo-btn__role">Tester</span><span class="demo-btn__email">tester@bugtracker.dev</span>
-            </button>
-            <button type="button" class="demo-btn" data-demo-email="dev@bugtracker.dev">
-              <span class="demo-btn__role">Developer</span><span class="demo-btn__email">dev@bugtracker.dev</span>
-            </button>
-          </div>
-        </section>
-
         <p class="sim-notice">
           <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
-          <span><strong>Simulated login for a university demo.</strong> Any non-empty password works for an existing active account. Passwords are never stored and this is not real security.</span>
+          <span><strong>Phase 1 static demo.</strong> Any valid email and password opens the app as the demo Admin. Nothing is checked against an account and nothing is stored. Real sign-in arrives in Phase 2.</span>
         </p>
       </div>
     </main>

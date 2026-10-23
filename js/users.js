@@ -3,7 +3,7 @@
  * Search, filter, sort, view details, edit role/status/name, activate/deactivate.
  */
 
-import { initLayout, refreshLayout } from './app.js';
+import { initLayout } from './app.js';
 import {
   getUsers,
   getUserById,
@@ -26,6 +26,7 @@ import {
   closeModal,
   confirmDialog,
   showToast,
+  showDemoSaved,
   showFormErrors,
   clearFormErrors,
   debounce,
@@ -228,7 +229,7 @@ async function toggleStatus(userId) {
   if (!confirmed) return;
 
   updateUser(user.id, { status: activating ? 'Active' : 'Inactive' });
-  showToast(`${user.name} has been ${activating ? 'activated' : 'deactivated'}.`, 'success');
+  showDemoSaved(`${user.name} has been ${activating ? 'activated' : 'deactivated'}.`);
   render();
 }
 
@@ -349,7 +350,6 @@ async function handleEditSubmit(event) {
 
   updateUser(user.id, changes);
   closeModal(els.editModal);
-  showToast(`${changes.name} was updated.`, 'success');
-  if (user.id === currentUser.id) refreshLayout();
+  showDemoSaved(`${changes.name} was updated.`);
   render();
 }
